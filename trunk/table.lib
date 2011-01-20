@@ -1,0 +1,39 @@
+declare name "Faust Tables Library";
+declare author "Romain Michon";
+declare version "1.0";
+
+import("math.lib");
+
+saturation(x) = x<: (_>1),(_<=1 : _*x) :> _+_;
+saturation2(x) = x<: (_<-1),(_>=-1 : _*x) :> _*-1+_;
+
+//*********************************************************************************
+// BOW TABLE
+//*********************************************************************************
+
+bow(offset,slope) = pow(abs(sample) + 0.75, -4) : saturation
+	with{
+	sample(y) = (y + offset)*slope;
+	};
+
+//*********************************************************************************
+// REED TABLE
+//*********************************************************************************
+	
+reed(offset,slope) = reedTable(_) : saturation : saturation2
+	with{
+	reedTable = offset + (slope*_);
+	};
+	
+//*********************************************************************************
+// BANDPASS FILTER BASED ON A BIQUAD
+//*********************************************************************************
+
+bandPass(resonance,radius) = TF2(b0,b1,b2,a1,a2)
+	with{
+		a2 = radius*radius;
+		a1 = -2*radius*cos(PI*2*resonance/SR);
+		b0 = 0.5-0.5*a2;
+		b1 = 0;
+		b2 = -b0;
+	};
