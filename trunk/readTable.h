@@ -30,6 +30,14 @@ float readSineWave(int index){
 	return tableRead(index,"/Users/romainmichon/Desktop/CCRMA/waves/sinewave.aiff",1024);
 };
 
+float readMand1(int index){
+	return tableRead(index,"/Users/romainmichon/Desktop/CCRMA/mandolin/waves/mand1.aiff",1024);
+};
+
+float readImpuls20(int index){
+	return tableRead(index,"/Users/romainmichon/Desktop/CCRMA/Faust-STK/puredatadir/waves/impuls20.aiff",256);
+};
+
 //marmstk1.aiff, size: 256
 float readMarmstk1(int index){
 	//char CurrentPath[MAX_PATH];
