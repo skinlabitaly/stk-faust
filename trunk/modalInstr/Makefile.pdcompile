@@ -1,0 +1,54 @@
+
+###--------------------------------------------
+### Build puredata externals on Darwin or Linux
+###
+
+system			:= $(shell uname -s)
+DEST			:= pddir/
+dspsrc  		:= $(wildcard *.dsp)
+cppsrc  		:= $(addprefix $(DEST), $(dspsrc:.dsp=.cpp))
+patches			:= $(addprefix $(DEST),  $(dspsrc:.dsp=.pd))
+FAUST2PD 		:= faust2pd
+F2PDFLAGS 		:= -r 10 -s
+
+###--------------------------------------------
+### compilation flags for Linux
+###
+LINUXCFLAGS 	:= -DPD -O2 -funroll-loops -fomit-frame-pointer -fPIC \
+    -Wall -W -Wshadow -Wno-unused -Wno-parentheses -Wno-switch $(CFLAGS)
+LINUXINCLUDE 	:=
+
+###--------------------------------------------
+### compilation flags for Darwin
+###
+DARWINCFLAGS 	:= -DPD -O2 -funroll-loops -fomit-frame-pointer -fPIC \
+      -Wall -W -Wshadow -Wno-unused -Wno-parentheses -Wno-switch $(CFLAGS)
+DYNLOAD_FLAGS	:= -bundle -undefined suppress -flat_namespace
+DARWININCLUDE 	:= -I/Applications/Pd-extended.app/Contents/Resources/include/
+
+OPTIONAL := -I . -lsndfile
+
+###--------------------------------------------
+### check what type of modules to build (MacOSX Darwin or Linux)
+###
+ifeq ($(system), Darwin)
+modules 		:= $(addprefix $(DEST),  $(dspsrc:.dsp=~.pd_darwin))
+else
+modules			:= $(addprefix $(DEST),  $(dspsrc:.dsp=~.pd_linux))
+endif
+
+
+allmodules: $(modules)
+
+$(DEST)%.cpp: %.dsp
+	faust -a $(ARCH) $< -o $@
+
+
+$(DEST)%~.pd_linux: $(DEST)%.cpp
+	$(CXX) $(LINUXCFLAGS) $(LINUXINCLUDE) -shared -Dmydsp=$(patsubst %~.pd_linux,%,$(notdir $@)) $< -o $@
+
+$(DEST)%~.pd_darwin: $(DEST)%.cpp
+	$(CXX) $(DARWINCFLAGS) $(DARWININCLUDE) $(DYNLOAD_FLAGS) $(OPTIONAL) -Dmydsp=$(patsubst %~.pd_darwin,%,$(notdir $@)) $< -o $@
+
+clean:
+	rm -rf $(DEST)
