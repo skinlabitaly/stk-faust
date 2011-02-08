@@ -1,6 +1,6 @@
 all :
 	install -d puredatadir
-	$(MAKE) DEST='puredatadir/' ARCH='puredata.cpp' LIB='' -f Makefile.pdcompile
+	$(MAKE) DEST='puredatadir/' ARCH='puredata.cpp' INC='-I/opt/local/include' LIB='-L/opt/local/lib' -f Makefile.pdcompile
 
 plot :
 	install -d plotdir
@@ -9,7 +9,7 @@ plot :
 jackqt :
 	install -d jackqtdir
 	$(MAKE) DEST='jackqtdir/' ARCH='jack-qt.cpp' LIB='-ljack' -f Makefile.qtcompile
-	
+
 svg:
 	$(MAKE) -f Makefile.svgcompile
 
