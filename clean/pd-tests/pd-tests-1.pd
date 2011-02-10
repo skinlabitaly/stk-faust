@@ -1,0 +1,17 @@
+#N canvas 29 296 1405 593 10;
+#X obj 412 495 dac~;
+#X obj 255 -14 bowed;
+#X obj -258 -14 blowBotle;
+#X obj 5 -13 blowHole;
+#X obj 509 -13 brass;
+#X obj 763 -11 clarinet;
+#X connect 1 1 0 0;
+#X connect 1 2 0 1;
+#X connect 2 1 0 0;
+#X connect 2 2 0 1;
+#X connect 3 1 0 0;
+#X connect 3 2 0 1;
+#X connect 4 1 0 0;
+#X connect 4 2 0 1;
+#X connect 5 1 0 0;
+#X connect 5 2 0 1;
