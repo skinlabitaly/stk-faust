@@ -65,10 +65,10 @@ $(DEST)%.pd: %.dsp
 	rm -f $<.xml
 
 $(DEST)%~.pd_linux: $(DEST)%.cpp
-	$(CXX) $(LINUXCFLAGS) $(LINUXINCLUDE) $(OPTIONAL) -shared -Dmydsp=$(patsubst %~.pd_linux,%,$(notdir $@)) $< -o $@
+	$(CXX) $(INC) $(LINUXCFLAGS) $(LINUXINCLUDE) $(LIB) $(OPTIONAL) -shared -Dmydsp=$(patsubst %~.pd_linux,%,$(notdir $@)) $< -o $@
 
 $(DEST)%~.pd_darwin: $(DEST)%.cpp
-	$(CXX) $(DARWINCFLAGS) $(DARWININCLUDE) $(DYNLOAD_FLAGS) $(OPTIONAL) -Dmydsp=$(patsubst %~.pd_darwin,%,$(notdir $@)) $< -o $@
+	$(CXX) $(INC) $(DARWINCFLAGS) $(DARWININCLUDE) $(LIB) $(DYNLOAD_FLAGS) $(OPTIONAL) -Dmydsp=$(patsubst %~.pd_darwin,%,$(notdir $@)) $< -o $@
 
 clean:
 	rm -rf $(DEST)
