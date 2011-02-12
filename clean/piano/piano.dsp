@@ -11,14 +11,14 @@ import("instrument.lib");
 
 //==================== GUI SPECIFICATION ================
 
-freq = nentry("freq", 440, 20, 20000, 1);
-gain = nentry("gain", 1, 0, 1, 0.01); 
-gate = button("gate") > 0;
+freq = nentry("h:Basic Parameters/freq", 440, 20, 20000, 1);
+gain = nentry("h:Basic Parameters/gain", 1, 0, 1, 0.01); 
+gate = button("h:Basic Parameters/gate") > 0;
 
-brightnessFactor = hslider("brightnessFactor",0,0,1,0.01);
-detuningFactor = hslider("detuningFactor",0.1,0,1,0.01)*10;
-stiffnessFactor = hslider("stiffnessFactor",0.28,0,1,0.01)*3.7;
-hammerHardness = hslider("hammerHardness",0.1,0,1,0.01)*0.1;
+brightnessFactor = hslider("v:Physical Parameters/brightnessFactor",0,0,1,0.01);
+detuningFactor = hslider("v:Physical Parameters/detuningFactor",0.1,0,1,0.01)*10;
+stiffnessFactor = hslider("v:Physical Parameters/stiffnessFactor",0.28,0,1,0.01)*3.7;
+hammerHardness = hslider("v:Physical Parameters/hammerHardness",0.1,0,1,0.01)*0.1;
 
 //==================== COMMUTED PIANO PARAMETERS ================
 
