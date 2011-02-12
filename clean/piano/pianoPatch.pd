@@ -1,0 +1,8 @@
+#N canvas 643 201 357 353 10;
+#X obj 216 290 dac~;
+#X obj 46 30 midi-in 8;
+#X obj 46 95 piano;
+#X connect 1 0 2 0;
+#X connect 1 1 2 1;
+#X connect 2 1 0 0;
+#X connect 2 2 0 1;
