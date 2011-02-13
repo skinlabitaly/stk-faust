@@ -565,4 +565,3 @@ float getValueStiffnessCoefficient(float index){
 float getValueReleaseLoopGain(float index){
 	return releaseLoopGain.getValue(index);
 }
-
