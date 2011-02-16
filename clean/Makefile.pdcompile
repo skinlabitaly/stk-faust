@@ -10,7 +10,7 @@ cppsrc  		:= $(addprefix $(DEST), $(dspsrc:.dsp=.cpp))
 patches			:= $(addprefix $(DEST),  $(dspsrc:.dsp=.pd))
 FAUST2PD 		:= faust2pd
 F2PDFLAGS 		:= -n 1 -s
-OPTIONAL := -I ./ -lsndfile
+OPTIONAL := -I ./
 
 ###--------------------------------------------
 ### compilation flags for Linux
