@@ -41,10 +41,14 @@ L = hslider("dynamic_level", -10, -60, 0, 1) : db2linear;
 
 // Spatial "width" (not in original EKS, but only costs "one tap"):
 W = hslider("center-panned spatial width", 0.5, 0, 1, 0.01);
-A = hslider("pan angle", 0.5, 0, 1, 0.01);
+A = hslider("pan angle", 0.6, 0, 1, 0.01);
 
-spring1 = hslider("spring1",0.1,-1.0,1.0,0.01);
-spring2 = hslider("spring2",-0.1,-1,1,0.01);
+//Nonlinear filter parameters
+typeModulation = checkbox("v:Nonlinear Filter/typeMod");
+signalModType = nentry("v:Nonlinear Filter/sigModType",0,0,2,1);
+nonlinearity = hslider("v:Nonlinear Filter/Nonlinearity",0,0,1,0.01) : smooth(0.999);
+frequencyMod = hslider("v:Nonlinear Filter/freqMod",220,20,1000,0.1) : smooth(0.999);
+followFreq = checkbox("v:Nonlinear Filter/followFreq");
 
 //==================== SIGNAL PROCESSING ================
 
@@ -82,36 +86,14 @@ loopfilter = dampingfilter2; // or dampingfilter1
 filtered_excitation = excitation : smooth(pickangle) 
 		    : pickposfilter : levelfilter(L,freq); // see filter.lib
 
+nonLinMod =  nonLinearModulator(1,followFreq,freq,signalModType,typeModulation,frequencyMod,6);
 
-//NonLinear Filter
-
-freqMod = hslider("freqMod",220,20,1000,0.1) : smooth(0.999);
-nonlinearity = hslider("Nonlinearity",0,0,1,0.01) : smooth(0.999);
-
-//allow the use of the same frequency for the pole modulation than for the instrument tone
-followFreq = checkbox("followFreq");
-
-//select the type of the pole modulation: sine wave or the signal itself
-typeMod = checkbox("typeMod");
-
-nonLinEnvelope = adsr(nonLinAttack,nonLinDecay,100,nonLinRelease,gate);
-freqOscMod = followFreq*freq + (followFreq < 1)*freqMod;
-
-tsig(x) = nonlinearity * PI * x; 
-//t(x) = nonlinearity * PI * ((x + x')/2);
-t = nonlinearity * PI * osc(freqOscMod); //teta is modified by a sine wave
-N = 6; 
-
-nonLinearFilterSig(x) = x <: allpassnn(N,(par(i,N,tsig(x)))); // use input signal for each theta coefficient
-nonLinearFilter = _ <: allpassnn(N,(par(i,N,t)));
-
-
-stringloop = (+ : fdelay4(Pmax, P-2)) ~ (loopfilter <: (nonLinearFilter*typeMod,nonLinearFilterSig*(typeMod < 1) :> +));
+stringloop = (+ : fdelay4(Pmax, P-2)) ~ (loopfilter : nonLinMod);
 
 // Second output decorrelated somewhat for spatial diversity over imaging:
 widthdelay = delay(Pmax,W*P/2);
 
 // Assumes an optionally spatialized mono signal, centrally panned:
-stereopanner(A) = _,_ : *(1.0-A), *(A);
+stereopanner = _,_ : *(1.0-A), *(A);
 
-process = filtered_excitation : stringloop : widthdelay <: _,_;// : stereopanner(A);
+process = filtered_excitation : stringloop <: _,widthdelay : stereopanner ;

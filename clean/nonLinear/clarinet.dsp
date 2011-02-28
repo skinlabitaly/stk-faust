@@ -31,9 +31,15 @@ envelopeAttack = hslider("v:Envelope Parameters/envelopeAttack",0.01,0,2,0.01);
 envelopeDecay = hslider("v:Envelope Parameters/envelopeDecay",0.05,0,2,0.01);
 envelopeRelease = hslider("v:Envelope Parameters/envelopeRelease",0.1,0,2,0.01);
 
-nonLinAttack = hslider("nonLinAttack",0.1,0,2,0.01);
-nonLinDecay = hslider("nonLinDecay",0.05,0,2,0.01);
-nonLinRelease = hslider("nonLinRelease",0.2,0,2,0.01);
+//Nonlinear filter parameters
+typeModulation = checkbox("v:Nonlinear Filter/typeMod");
+signalModType = nentry("v:Nonlinear Filter/sigModType",0,0,2,1);
+nonlinearity = hslider("v:Nonlinear Filter/Nonlinearity",0,0,1,0.01) : smooth(0.999);
+frequencyMod = hslider("v:Nonlinear Filter/freqMod",220,20,1000,0.1) : smooth(0.999);
+followFreq = checkbox("v:Nonlinear Filter/followFreq");
+nonLinAttack = hslider("v:Nonlinear Filter/nonLinAttack",0.1,0,2,0.01);
+nonLinDecay = hslider("v:Nonlinear Filter/nonLinDecay",0.05,0,2,0.01);
+nonLinRelease = hslider("v:Nonlinear Filter/nonLinRelease",0.2,0,2,0.01);
 
 //==================== SIGNAL PROCESSING ================
 
@@ -55,27 +61,8 @@ vibrato = osc(vibratoFreq)*vibratoGain*envVibrato(0.1*2*vibratoAttack,0.9*2*vibr
 breath = envelope + envelope*noise*noiseGain;
 breathPressure = breath + breath*vibrato;
 
-//NonLinear Filter
-
-freqMod = hslider("freqMod",220,20,1000,0.1) : smooth(0.999);
-nonlinearity = hslider("Nonlinearity",0,0,1,0.01) : smooth(0.999);
-
-//allow the use of the same frequency for the pole modulation than for the instrument tone
-followFreq = checkbox("followFreq");
-
-//select the type of the pole modulation: sine wave or the signal itself
-typeMod = checkbox("typeMod");
-
-nonLinEnvelope = adsr(nonLinAttack,nonLinDecay,100,nonLinRelease,gate);
-freqOscMod = followFreq*freq + (followFreq < 1)*freqMod;
-
-tsig(x) = nonlinearity * nonLinEnvelope * PI * x; 
-//t(x) = nonlinearity * PI * ((x + x')/2);
-t = nonlinearity * nonLinEnvelope * PI * osc(freqOscMod); //teta is modified by a sine wave
-N = 6; 
-
-nonLinearFilterSig(x) = x <: allpassnn(N,(par(i,N,tsig(x)))); // use input signal for each theta coefficient
-nonLinearFilter = _ <: allpassnn(N,(par(i,N,t)));
+envelopeMod = adsr(nonLinAttack,nonLinDecay,100,nonLinRelease,gate); 
+nonLinMod =  nonLinearModulator(envelopeMod,followFreq,freq,signalModType,typeModulation,frequencyMod,6);
 
 process =
 	//Commuted Loss Filtering
@@ -83,6 +70,6 @@ process =
 	//Non-Linear Scattering
 	(reedTable*_) + breathPressure) ~ 
 	//Delay with Feedback
-	(delayLine <: (nonLinearFilter*typeMod,nonLinearFilterSig*(typeMod < 1) :> +)) : 
+	(delayLine : nonLinMod) : 
 	//scaling and stereo
 	_*gain <: _,_; 
