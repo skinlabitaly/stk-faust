@@ -111,7 +111,7 @@ nonlinearity in the string-spring system.  Importantly, the switching
 from one spring to the other only accurs when the spring displacements
 are zero, so that energy is not affected.  (The potential energy
 stored in a spring $k_i$ displaced by $x_i$ meters is given by
-$k_ix_i^2/2$.)
+$k_ix_i^2/2$ \cite{PASP}.)
 
 \begin{figure}[ht]
 \centerline{\includegraphics[scale=0.8]{eps/stringk1k2.eps}}
@@ -140,9 +140,9 @@ H_i(z) = -\frac{a_i+\zi}{1+a_i\zi},\qquad a_i=\frac{k_i-2Rf_s}{k_i+2Rf_s}
 \]
 where $f_s$ denotes the sampling rate in Hz.  While the digital
 reflectance remains an allpass filter due to properties of the
-bilinear transform \cite{PASP}, energy conservation is only
+bilinear transform, energy conservation is only
 approximately obtained, except when the allpass state variable happens
-to be exactly zero when the coefficient is switched from $a_1$ to
+to be exactly zero when the coefficient $a_i$ is switched from $a_1$ to
 $a_2$ or vice versa.
 
 \subsection{Delay-Line Length Modulation}
@@ -166,18 +166,18 @@ lengths via a cotton thread near the bridge
 delay-line length is modulated without careful regard for energy
 conservation; this normally works out fine in practice because
 lengthening a delay-line is energy conserving when the new samples
-contain zero, and shortening the delay-line is typically a bit lossy
-but never energy-creating.
+are zero, and shortening the delay-line is typically a bit lossy
+and never energy-creating.
 
 \section{Nonlinear Allpasses of Arbitrary Order}
 
-We propose to extend the nonlinear switching allpass in two ways
+We propose to extend the nonlinear switching allpass in two ways:
 \begin{enumerate}
 \item Any order allpass can be used (not just first order).
 \item Any kind of coefficient modulation can be used (not just
   switching between two values at zero crossings of some state).
 \end{enumerate}
-Our method is based on the normalized ladder filter (NLF)
+Our method is based on the Normalized Ladder Filter (NLF)
 \cite{GrayAndMarkel75}. Such filters can be derived from digital
 waveguide filters by using normalized traveling waves in place of
 ordinary physical traveling waves \cite{PASP}, where the normalization
@@ -221,7 +221,7 @@ of another first-order allpass of the same form (Fig.{} \ref{nlf}),
 then a second-order NLF allpass is obtained.  This process is extended
 to arbitrary orders by replacing the rightmost delay by a first-order
 NLF allpass followed by a delay.  This same recursive construction
-applies also for the Kelly-Lochbaum ladder allpass, and the
+works also for the Kelly-Lochbaum ladder allpass, and the
 two-multiply and one-multiply lattice structures \cite{MG,PASP}.
 
 In Faust, NLF allpass filters of arbitrary order are conveniently
