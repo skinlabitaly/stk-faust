@@ -4,7 +4,7 @@ all :
 
 plot :
 	install -d plotdir
-	$(MAKE) DEST='plotdir/' ARCH='plot.cpp' LIB='-lsndfile -I ./' -f Makefile.compile
+	$(MAKE) DEST='plotdir/' ARCH='plot.cpp' LIB='-I ./' -f Makefile.compile
 
 jackqt :
 	install -d jackqtdir

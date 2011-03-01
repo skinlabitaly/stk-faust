@@ -150,4 +150,4 @@
 #X connect 79 1 85 0;
 #X connect 85 0 86 0;
 #X coords 0 -1 1 1 235 260 1 0 0;
-#X text 0 280 Generated Mon Feb 28 20:46:41 2011 by faust2pd v2.2. See http://faust.grame.fr and http://pure-lang.googlecode.com.;
+#X text 0 280 Generated Tue Mar  1 14:06:54 2011 by faust2pd v2.2. See http://faust.grame.fr and http://pure-lang.googlecode.com.;

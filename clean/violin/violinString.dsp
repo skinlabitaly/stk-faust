@@ -61,11 +61,12 @@ instrumentBody(feedBckBridge) = (_*-1 <: _ + feedBckBridge,_ : (bowVelocity-_ <:
 
 //TF2 bank
 
-fC = ffunction(float violinImpRes(int,int), <instrument.h>,"");
-bodyFilter = seq(i,6,tf2(fC(i,0),fC(i,1),fC(i,2),fC(i,3),fC(i,4)));
+fC = ffunction(float violinImpRes2(int,int), <instrument.h>,"");
+bodyFilter = seq(i,6,tf2(fC(i,0),fC(i,1),fC(i,2),fC(i,3),fC(i,4))) : *(0.0637);
+//bodyFilter = seq(i,8,tf2(fC(i,0),fC(i,1),fC(i,2),fC(i,3),fC(i,4))) : *(0.0624);
 
 //process = bodyFilter;
 
 //process = (stringFilter : instrumentBody) ~ bridgeDelay;
 
-process = (stringFilter : instrumentBody) ~ bridgeDelay : bodyFilter;
+process = (stringFilter : instrumentBody) ~ bridgeDelay;// : bodyFilter;
