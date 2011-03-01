@@ -213,11 +213,16 @@ distribution (\texttt{filter.lib} after 2/2/11).
 \caption{\label{nlf1}{\it First-order normalized ladder allpass filter as drawn by Faust.}}
 \end{figure}
 
-A general property of allpass filters is that any delay element can be
-replaced by an allpass to produce another allpass.  If the delay
-element in Fig.{} \ref{nlf} is replaced by itself following another
-first-order allpass of the form shown in Fig.{} \ref{nlf}, then the
-second-order NLF allpass is obtained.
+A general property of allpass filters is that each delay element can
+be replaced by an allpass to produce another allpass (a
+circle-to-circle conformal map of the transfer function).  If the
+delay element in Fig.{} \ref{nlf} is replaced by itself at the output
+of another first-order allpass of the same form (Fig.{} \ref{nlf}),
+then a second-order NLF allpass is obtained.  This process is extended
+to arbitrary orders by replacing the rightmost delay by a first-order
+NLF allpass followed by a delay.  This same recursive construction
+applies also for the Kelly-Lochbaum ladder allpass, and the
+two-multiply and one-multiply lattice structures \cite{MG,PASP}.
 
 In Faust, NLF allpass filters of arbitrary order are conveniently
 specified by means of the pattern matching facility:
