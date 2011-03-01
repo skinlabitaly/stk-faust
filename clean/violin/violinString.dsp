@@ -44,7 +44,7 @@ fdelbridge = (SR/frequency-4) * betaRatio;
 bridgeDelay = delay(4096,fdelbridge);
 
 //Body Filter: a biquad filter with a normalized pick gain
-bodyFilter = bandPass(500,0.85);
+//bodyFilter = bandPass(500,0.85);
 
 //String Filter: a lowpass filter
 stringFilter = _*filterGain : -onePole(b0,a1)
@@ -59,6 +59,13 @@ forceCondition = force > 0;
 instrumentBody(feedBckBridge) = (_*-1 <: _ + feedBckBridge,_ : (bowVelocity-_ <: bowTable*_ : _*forceCondition*gate <: _,_),_ : 
 	_,_+_ : _ + feedBckBridge,_) ~ neckDelay : !,_;
 
-process = (stringFilter : instrumentBody) ~ bridgeDelay : bodyFilter(_*0.2);
+//TF2 bank
 
-//process = string : _*gain <: _,_;
+fC = ffunction(float violinImpRes(int,int), <instrument.h>,"");
+bodyFilter = seq(i,6,tf2(fC(i,0),fC(i,1),fC(i,2),fC(i,3),fC(i,4)));
+
+//process = bodyFilter;
+
+//process = (stringFilter : instrumentBody) ~ bridgeDelay;
+
+process = (stringFilter : instrumentBody) ~ bridgeDelay : bodyFilter;
