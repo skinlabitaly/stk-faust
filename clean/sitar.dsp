@@ -1,4 +1,4 @@
-declare name "WaveGuide Sitar from STK";
+declare name "WaveGuide Brass from STK";
 declare author "Romain Michon (rmichon@ccrma.stanford.edu)";
 declare copyright "Romain Michon";
 declare version "1.0";
