@@ -70,6 +70,6 @@ process =
 	//Non-Linear Scattering
 	(reedTable*_) + breathPressure) ~ 
 	//Delay with Feedback
-	(delayLine : nonLinMod) : 
+	(delayLine <: nonLinMod,_ :> + : /(2)) : 
 	//scaling and stereo
 	_*gain <: _,_; 
