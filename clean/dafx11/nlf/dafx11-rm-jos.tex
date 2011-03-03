@@ -1,0 +1,101 @@
+% From Template LaTeX file for DAFx-11 papers
+%
+% To generate the correct references using BibTeX, run latex, bibtex, latex, latex
+
+\def\papertitle{Porting Synthesis Tool Kit (STK) and SynthBuilder Patches to Faust with ...}
+\def\paperauthorA{Romain Michon}
+\def\paperauthorB{Julius O. Smith}
+
+\documentclass[twoside,a4paper]{article}
+\usepackage{dafx_11}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{euscript}
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{ifpdf}
+
+\usepackage[english]{babel}
+\usepackage{caption}
+\usepackage{subfig, color}
+
+\setcounter{page}{1}
+\ninept
+
+\usepackage{times}
+% Saves a lot of ouptut space in PDF... after conversion with the distiller
+% Delete if you cannot get PS fonts working on your system.
+
+% pdf-tex settings: detect automatically if run by latex or pdflatex
+\newif\ifpdf
+\ifx\pdfoutput\relax
+\else
+   \ifcase\pdfoutput
+      \pdffalse
+   \else
+      \pdftrue
+\fi
+
+\ifpdf % compiling with pdflatex
+  \usepackage[pdftex,
+    pdftitle={\papertitle},
+    pdfauthor={\paperauthorA, \paperauthorB},
+    colorlinks=false, % links are activated as colror boxes instead of color text
+    bookmarksnumbered, % use section numbers with bookmarks
+    pdfstartview=XYZ % start with zoom=100% instead of full screen; especially useful if working with a big screen :-)
+  ]{hyperref}
+  \pdfcompresslevel=9
+  \usepackage[pdftex]{graphicx}
+  \usepackage[figure,table]{hypcap}
+\else % compiling with latex
+  \usepackage[dvips]{epsfig,graphicx}
+  \usepackage[dvips,
+    colorlinks=false, % no color links
+    bookmarksnumbered, % use section numbers with bookmarks
+    pdfstartview=XYZ % start with zoom=100% instead of full screen
+  ]{hyperref}
+  % hyperrefs are active in the pdf file after conversion
+  \usepackage[figure,table]{hypcap}
+\fi
+
+\title{\papertitle}
+
+\affiliation{
+\paperauthorA\sthanks{CCRMA visiting researcher from Saint \'Etienne University, France, supported by the ASTREE Project}\mbox{ and }\paperauthorB}
+{\href{https://ccrma.stanford.edu/\~{}jos/}{Center for Computer Research in Music and Acoustics}\\ (CCRMA) Stanford University \\ Palo Alto, CA 94305, USA\\
+{\tt \href{mailto:rmichon|jos@ccrma.stanford.edu}{rmichon@ccrma.stanford.edu}}
+}
+
+\newcommand{\zi}{z^{-1}}
+\begin{document}
+% more pdf-tex settings:
+\ifpdf % used graphic file format for pdflatex
+  \DeclareGraphicsExtensions{.png,.jpg,.pdf}
+\else  % used graphic file format for latex
+  \DeclareGraphicsExtensions{.eps}
+\fi
+
+\maketitle
+
+\begin{abstract}
+[concise summary of paper]
+\end{abstract}
+
+\section{Introduction}
+\label{sec:intro}
+
+\section{...}
+
+\section{...}
+
+\section{Conclusions}
+
+\section{Acknowledgments}
+
+%\newpage
+{\small\raggedright
+\nocite{*}
+\bibliographystyle{IEEEbib}
+\bibliography{dafx11-jos}
+}
+
+\end{document}
