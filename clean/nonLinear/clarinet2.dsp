@@ -48,9 +48,13 @@ reedTableOffset = 0.7;
 reedTableSlope = -0.44 + (0.26*reedStiffness);
 reedTable = reed(reedTableOffset,reedTableSlope);
 
+nlfOrder = 6;
+envelopeMod = adsr(nonLinAttack,nonLinDecay,100,nonLinRelease,gate); 
+nonLinMod =  nonLinearModulator(envelopeMod,followFreq,freq,signalModType,typeModulation,frequencyMod,nlfOrder);
+
 //Delay line 
-delayLength = SR/freq*0.5 - 1.5;
-delayLine = delay(4096,delayLength);
+delayLength = SR/freq*0.5 - 1.5 - (nlfOrder*nonlinearity);
+delayLine = fdelay(4096,delayLength);
 
 //One zero filter with with pole at -1
 filter = oneZero0(0.5,0.5);
@@ -61,15 +65,12 @@ vibrato = osc(vibratoFreq)*vibratoGain*envVibrato(0.1*2*vibratoAttack,0.9*2*vibr
 breath = envelope + envelope*noise*noiseGain;
 breathPressure = breath + breath*vibrato;
 
-envelopeMod = adsr(nonLinAttack,nonLinDecay,100,nonLinRelease,gate); 
-nonLinMod =  nonLinearModulator(envelopeMod,followFreq,freq,signalModType,typeModulation,frequencyMod,6);
-
 process =
 	//Commuted Loss Filtering
 	((filter*-0.95) - breathPressure <: 
 	//Non-Linear Scattering
 	(reedTable*_) + breathPressure) ~ 
 	//Delay with Feedback
-	(delayLine <: nonLinMod,_ :> + : /(2)) : 
+	(delayLine <: nonLinMod*nonlinearity,_*(1-nonlinearity) :> +) : 
 	//scaling and stereo
 	_*gain <: _,_; 
