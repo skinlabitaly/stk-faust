@@ -49,7 +49,12 @@ reedTableSlope = -0.44 + (0.26*reedStiffness);
 reedTable = reed(reedTableOffset,reedTableSlope);
 
 nlfOrder = 6;
-envelopeMod = adsr(nonLinAttack,nonLinDecay,100,nonLinRelease,gate); 
+//envelopeMod = adsr(nonLinAttack,nonLinDecay,100,nonLinRelease,gate); 
+envelopeMod = invSin*(cntSamp <= (nonLinAttack*float(SR)/4)) + 1*(cntSamp > (nonLinAttack*float(SR)/4))
+	    with{
+		cntSamp = (+(1)*gate~_ ) - 1;
+	    	invSin = float(cntSamp)*(2.0*PI)/float(nonLinAttack*SR) + 1.5*PI : sin : +(1.0); 
+	    };
 nonLinMod =  nonLinearModulator(envelopeMod,followFreq,freq,signalModType,typeModulation,frequencyMod,nlfOrder);
 
 //Delay line 
