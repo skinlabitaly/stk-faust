@@ -565,3 +565,226 @@ float getValueStiffnessCoefficient(float index){
 float getValueReleaseLoopGain(float index){
 	return releaseLoopGain.getValue(index);
 }
+
+//Harpsichord
+
+double loopFilterb0_points[18*2] = {
+	35.000,0.94373,
+	36.000,0.94731,
+	46.000,0.94731,
+	47.000,0.96202,
+	52.000,0.96202,
+	53.000,0.97477,
+	58.000,0.97477,
+	59.000,0.97733,
+	64.000,0.97733,
+	65.000,0.97971,
+	70.000,0.97971,
+	71.000,0.97971,
+	76.000,0.97971,
+	77.000,0.98698,
+	82.000,0.98698,
+	83.000,0.98462,
+	86.000,0.98462,
+	87.000,0.98611,
+};
+extern LookupTable loopFilterb0;
+LookupTable loopFilterb0(&loopFilterb0_points[0], 18);
+
+float getValueLoopFilterb0(float index){
+	return loopFilterb0.getValue(index);
+}
+
+double loopFilterb1_points[18*2] = {
+	35.000,0.60010,
+	36.000,-0.59124,
+	46.000,-0.59124,
+	47.000,-0.21243,
+	52.000,-0.21243,
+	53.000,-0.39280,
+	58.000,-0.39280,
+	59.000,-0.48307,
+	64.000,-0.48307,
+	65.000,0.51965,
+	70.000,0.51965,
+	71.000,0.51965,
+	76.000,0.51965,
+	77.000,-0.42463,
+	82.000,-0.42463,
+	83.000,0.85655,
+	86.000,0.85655,
+	87.000,0.68851,
+};
+extern LookupTable loopFilterb1;
+LookupTable loopFilterb1(&loopFilterb1_points[0], 18);
+
+float getValueLoopFilterb1(float index){
+	return loopFilterb1.getValue(index);
+}
+
+double loopFilterb2_points[18*2] = {
+	35.000,-0.00360,
+	36.000,-0.12249,
+	46.000,-0.12249,
+	47.000,-0.16044,
+	52.000,-0.16044,
+	53.000,-0.21680,
+	58.000,-0.21680,
+	59.000,-0.16346,
+	64.000,-0.16346,
+	65.000,0.22162,
+	70.000,0.22162,
+	71.000,0.22162,
+	76.000,0.22162,
+	77.000,-0.14973,
+	82.000,-0.14973,
+	83.000,0.24937,
+	86.000,0.24937,
+	87.000,0.14838,
+};
+extern LookupTable loopFilterb2;
+LookupTable loopFilterb2(&loopFilterb2_points[0], 18);
+
+float getValueLoopFilterb2(float index){
+	return loopFilterb2.getValue(index);
+}
+
+double loopFiltera1_points[18*2] = {
+	35.000,0.5941,
+	36.000,-0.65928,
+	46.000,-0.65928,
+	47.000,-0.24222,
+	52.000,-0.24222,
+	53.000,-0.41402,
+	58.000,-0.41402,
+	59.000,-0.50837,
+	64.000,-0.50837,
+	65.000,0.51263,
+	70.000,0.51263,
+	71.000,0.51263,
+	76.000,0.51263,
+	77.000,-0.43976,
+	82.000,-0.43976,
+	83.000,0.85396,
+	86.000,0.85396,
+	87.000,0.68332,
+};
+extern LookupTable loopFiltera1;
+LookupTable loopFiltera1(&loopFiltera1_points[0], 18);
+
+float getValueLoopFiltera1(float index){
+	return loopFiltera1.getValue(index);
+}
+
+double loopFiltera2_points[18*2] = {
+	35.000,-0.02641,
+	36.000,-0.10275,
+	46.000,-0.10275,
+	47.000,-0.15842,
+	52.000,-0.15842,
+	53.000,-0.21653,
+	58.000,-0.21653,
+	59.000,-0.15833,
+	64.000,-0.15833,
+	65.000,0.22025,
+	70.000,0.22025,
+	71.000,0.22025,
+	76.000,0.22025,
+	77.000,-0.14583,
+	82.000,-0.14583,
+	83.000,0.24405,
+	86.000,0.24405,
+	87.000,0.14370,
+};
+extern LookupTable loopFiltera2;
+LookupTable loopFiltera2(&loopFiltera2_points[0], 18);
+
+float getValueLoopFiltera2(float index){
+	return loopFiltera2.getValue(index);
+}
+
+//bass
+
+double bassLoopFilterb0_points[19*2] = {
+	24.000,0.54355,
+	26.000,0.54355,
+	27.000,0.55677,
+	29.000,0.55677,
+	32.000,0.55677,
+	33.000,0.83598,
+	36.000,0.83598,
+	43.000,0.83598,
+	44.000,0.88292,
+	48.000,0.88292,
+	51.000,0.88292,
+	52.000,0.77805,
+	54.000,0.77805,
+	57.000,0.77805,
+	58.000,0.91820,
+	60.000,0.91820,
+	61.000,0.91820,
+	63.000,0.94594,
+	65.000,0.91820,
+};
+extern LookupTable bassLoopFilterb0;
+LookupTable bassLoopFilterb0(&bassLoopFilterb0_points[0], 18);
+
+float getValueBassLoopFilterb0(float index){
+	return bassLoopFilterb0.getValue(index);
+}
+
+double bassLoopFilterb1_points[19*2] = {
+	24.000,-0.36586,
+	26.000,-0.36586,
+	27.000,-0.37628,
+	29.000,-0.37628,
+	32.000,-0.37628,
+	33.000,-0.60228,
+	36.000,-0.60228,
+	43.000,-0.60228,
+	44.000,-0.65721,
+	48.000,-0.65721,
+	51.000,-0.65721,
+	52.000,-0.51902,
+	54.000,-0.51902,
+	57.000,-0.51902,
+	58.000,-0.80765,
+	60.000,-0.80765,
+	61.000,-0.80765,
+	63.000,-0.83230,
+	65.000,-0.83230,
+};
+extern LookupTable bassLoopFilterb1;
+LookupTable bassLoopFilterb1(&bassLoopFilterb1_points[0], 18);
+
+float getValueBassLoopFilterb1(float index){
+	return bassLoopFilterb1.getValue(index);
+}
+
+double bassLoopFiltera1_points[19*2] = {
+	24.000,-0.81486,
+	26.000,-0.81486,
+	27.000,-0.81147,
+	29.000,-0.81147,
+	32.000,-0.81147,
+	33.000,-0.76078,
+	36.000,-0.76078,
+	43.000,-0.76078,
+	44.000,-0.77075,
+	48.000,-0.77075,
+	51.000,-0.77075,
+	52.000,-0.73548,
+	54.000,-0.73548,
+	57.000,-0.73548,
+	58.000,-0.88810,
+	60.000,-0.88810,
+	61.000,-0.88810,
+	63.000,-0.88537,
+	65.000,-0.88537,
+};
+extern LookupTable bassLoopFiltera1;
+LookupTable bassLoopFiltera1(&bassLoopFiltera1_points[0], 18);
+
+float getValueBassLoopFiltera1(float index){
+	return bassLoopFiltera1.getValue(index);
+}
