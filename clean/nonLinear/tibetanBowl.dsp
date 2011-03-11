@@ -22,9 +22,10 @@ baseGain = hslider("v:Physical Parameters/baseGain",1,0,1,0.01);
 bowPressure = hslider("v:Physical Parameters/bowPressure",0.2,0,1,0.01);
 bowPosition = hslider("v:Physical Parameters/bowPosition",0,0,1,0.01);
 
-squared = checkbox("squared");
-freqMod = hslider("freqMod",220,1,10000,0.1) : smooth(0.999);
-nonlinearity = hslider("Nonlinearity",0,0,1,0.01) : smooth(0.999);
+//Nonlinear filter parameters
+typeModulation = nentry("v:Nonlinear Filter/typeMod",0,0,4,1);
+nonLinearity = hslider("v:Nonlinear Filter/Nonlinearity",0,0,1,0.01) : smooth(0.999);
+frequencyMod = hslider("v:Nonlinear Filter/freqMod",220,20,1000,0.1) : smooth(0.999);
 
 //==================== MODAL PARAMETERS ================
 
@@ -87,10 +88,10 @@ nModes = nMode(preset);
 tableOffset = 0;
 tableSlope = 10 - (9*bowPressure);
 
-base = SR/freq;
+baseDelayLength = SR/freq;
 
 //delay lengths in number of samples
-delayLength(x) = base/modes(preset,x);
+delayLength(x) = baseDelayLength/modes(preset,x);
 
 //delay lines
 delayLine(x) = delay(4096,delayLength(x));
@@ -108,18 +109,8 @@ velocityInput = velocityInputApp + _*baseGainApp,par(i,(nModes-1),(_*baseGainApp
 maxVelocity = 0.03 + 0.1*gain;
 bowVelocity = maxVelocity*adsr(0.02,0.005,90,0.01,gate);
 
-//Nonlinear filter
-
-//filter order
-N = 6; 
-
-//theta is modulated by a sine wave
-//t = nonlinearity * PI * osc(freqMod); //teta is modified by a sine wave 
-//nonLinearFilter = _ <: allpassnn(N,par(i,N,t));
-
-//theta is modulated by the signal itself
-t(x) = nonlinearity * PI * x * (x*squared + (squared < 1)); //teta is modified by a sine wave  
-nonLinearFilter(x) = x <: allpassnn(N,par(i,N,t(x)));
+nlfOrder = 6;
+NLFM =  nonLinearModulator(nonLinearity,1,freq,typeModulation,frequencyMod,nlfOrder);
 
 //Bow table lookup
 bowing = bowVelocity - velocityInput <: _*bow(tableOffset,tableSlope) : _/nModes;
@@ -127,10 +118,12 @@ bowing = bowVelocity - velocityInput <: _*bow(tableOffset,tableSlope) : _/nModes
 //One resonance
 resonance(x) = + : + (excitation(preset,x)*select) : delayLine(x) : _*basegains(preset,x) : bandPassFilter(x);
 
+stereo = stereoizer(baseDelayLength);
+
 process =
 		//Bowed Excitation
 		(bowing*((select-1)*-1) <:
 		//nModes resonances with nModes feedbacks for bow table look-up 
 		par(i,nModes,(resonance(i)~_)))~par(i,nModes,_) :> + : 
 		//Signal Scaling and stereo
-		_*2 : nonLinearFilter <: _,_;
+		NLFM : stereo;

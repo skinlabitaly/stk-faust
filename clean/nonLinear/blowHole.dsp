@@ -32,14 +32,10 @@ envelopeAttack = hslider("v:Envelope Parameters/envelopeAttack",0.01,0,2,0.01);
 envelopeRelease = hslider("v:Envelope Parameters/envelopeRelease",0.3,0,2,0.01);
 
 //Nonlinear filter parameters
-typeModulation = checkbox("v:Nonlinear Filter/typeMod");
-signalModType = nentry("v:Nonlinear Filter/sigModType",0,0,2,1);
-nonlinearity = hslider("v:Nonlinear Filter/Nonlinearity",0,0,1,0.01) : smooth(0.999);
+typeModulation = nentry("v:Nonlinear Filter/typeMod",0,0,4,1);
+nonLinearity = hslider("v:Nonlinear Filter/Nonlinearity",0,0,1,0.01) : smooth(0.999);
 frequencyMod = hslider("v:Nonlinear Filter/freqMod",220,20,1000,0.1) : smooth(0.999);
-followFreq = checkbox("v:Nonlinear Filter/followFreq");
 nonLinAttack = hslider("v:Nonlinear Filter/nonLinAttack",0.1,0,2,0.01);
-nonLinDecay = hslider("v:Nonlinear Filter/nonLinDecay",0.05,0,2,0.01);
-nonLinRelease = hslider("v:Nonlinear Filter/nonLinRelease",0.2,0,2,0.01);
 
 //==================== SIGNAL PROCESSING ================
 
@@ -78,18 +74,14 @@ toneHoleFilter = _*1 : poleZero(b0,-1,a1)
 	};
 
 nlfOrder = 3;
-//envelopeMod = adsr(nonLinAttack,nonLinDecay,100,nonLinRelease,gate); 
-envelopeMod = invSin*(cntSamp <= (nonLinAttack*float(SR)/4)) + 1*(cntSamp > (nonLinAttack*float(SR)/4))
-	    with{
-		cntSamp = (+(1)*gate~_ ) - 1;
-	    	invSin = float(cntSamp)*(2.0*PI)/float(nonLinAttack*SR) + 1.5*PI : sin : +(1.0); 
-	    };
-nonLinMod =  nonLinearModulator(envelopeMod,followFreq,freq,signalModType,typeModulation,frequencyMod,nlfOrder);
+envelopeMod = invSineEnv(nonLinAttack,gate);
+nonLinMod =  nonLinearModulator(nonLinearity,envelopeMod,freq,typeModulation,frequencyMod,nlfOrder);
+NLFM = _ <: (nonLinMod*nonLinearity,_*(1-nonLinearity) :> +)*(typeModulation < 3),nonLinMod*(typeModulation >= 3) :> _;
 
 //delay lengths in number of samples
 delay0Length = 5*SR/22050;
 delay2Length = 4*SR/22050;
-delay1Length = (SR/freq*0.5 - 3.5) - (delay0Length + delay2Length) - (nlfOrder*nonlinearity);
+delay1Length = (SR/freq*0.5 - 3.5) - (delay0Length + delay2Length) - (nlfOrder*nonLinearity)*(typeModulation < 2);
 
 //fractional delay lines
 delay0 = fdelay(4096,delay0Length);
@@ -120,4 +112,6 @@ threePortJunction(twoPortOutput) =  (_ <: junctionScattering(twoPortOutput),_ : 
 		junctionScattering(portA2,portB2) = (((portA2+portB2-2*_)*scattering) <: toneHole(_,portA2,portB2),_,_)~_ : !,_,_;
 	};
 
-process = (twoPortJunction : threePortJunction,_) ~ (delay1  <: nonLinMod*nonlinearity,_*(1-nonlinearity) :> +) : !,_*gain <: _,_;
+stereo = stereoizer(delay1Length);
+
+process = (twoPortJunction : threePortJunction,_) ~ (delay1 : NLFM) : !,_*gain : stereo;

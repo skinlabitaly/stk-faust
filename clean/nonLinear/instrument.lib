@@ -69,6 +69,16 @@ with {
     };
 };
 
+//----------------------- INVERSE SINE ATTACK ----------------------------
+
+invSineEnv(a,trig) = invSin*((cntSamp <= (a*float(SR)/4)) & (trig > 0)) + 1*(cntSamp > (a*float(SR)/4)) //+ invSin2*((trig < 1) & (cntSamp2 <= r*float(SR)/4))
+	    with{
+		cntSamp = (+(1)*(trig)~_ ) - 1;
+		//cntSamp2 = (+(1)*(trig<1)~_ ) - 1;
+	    	invSin = float(cntSamp)*(2.0*PI)/float(a*SR) + 1.5*PI : sin : +(1.0); 
+		//invSin2 = float(cntSamp)*(2.0*PI)/float(r*SR) + PI : sin : +(1.0);
+	    };
+
 //========================= TABLES ===============================
 
 //----------------------- TOOLS ----------------------------
@@ -135,28 +145,28 @@ jetTable(x) = x <: _*(_*_-1) : saturationPos : saturationNeg;
 
 //----------------------- NON LINEAR MODULATOR ----------------------------
 //REFERENCE:
+//	- nonLinearity = nonlinearity coefficient between 0 and 1 
 //	- env = input to connect any kind of envelope
-//	- followFrequency = set the sine wave frequency to the current tone frequency
 //	- freq = current tone frequency
-//	- sigModType = if 0: the incoming signal modulates theta ; 
-//	  	       if 1: the incoming signal is averaged to modulate theta ; 
-//	  	       if 2: the incoming signal is squared to modulate theta
-//	- typeMod = if 0: filter coefs are modulated by the incoming signal ; 
-//	  	    if 1: filter coefs are modulated by a sine wave
+//	- typeMod = if 0: theta is modulated by the incoming signal ;
+//	  	    if 1: theta is modulated by the averaged incoming signal ;
+//		    if 2: theta is modulated by the squared incoming signal ;
+//	  	    if 3: theta is modulated by a sine wave of frequency freqMod ;
+//		    if 4: theta is modulated by a sine wave of frequency freq
 //	- freqMod = frequency of the sine wave modulation
 //	- order = order of the filter
  
-nonLinearModulator(env,followFrequency,freq,sigModType,typeMod,freqMod,order) = 
-	_ <: nonLinearFilterOsc*typeMod,nonLinearFilterSig*(typeMod < 1) :> +
+nonLinearModulator(nonlinearity,env,freq,typeMod,freqMod,order) = 
+	_ <: nonLinearFilterOsc*(typeMod >= 3),nonLinearFilterSig*(typeMod < 3) :> +
 	with{
-		freqOscMod = followFrequency*freq + (followFrequency < 1)*freqMod;
+		freqOscMod = (typeMod == 4)*freq + (typeMod != 4)*freqMod;
 
 		tsignorm(x) = nonlinearity * PI * x * env;
 		tsigsquared(x) = nonlinearity * PI * x * x * env;
 		tsigav(x) = nonlinearity * PI * ((x + x')/2) * env;
 
-		tsig(x) = tsignorm(x)*(sigModType == 0) + tsigav(x)*(sigModType == 1) 
-			  + tsigsquared(x)*(sigModType == 2);
+		tsig(x) = tsignorm(x)*(typeMod == 0) + tsigav(x)*(typeMod == 1) 
+			  + tsigsquared(x)*(typeMod == 2);
 
 		tosc = nonlinearity * PI * osc(freqOscMod) * env; 
 
@@ -175,3 +185,15 @@ marmstk1TableSize = 246;
 
 readImpuls20 = ffunction(float readImpuls20(int), <instrument.h>,"");
 impuls20TableSize = 256;
+
+//========================= TOOLS ===============================
+
+//----------------------- STEREOIZER ----------------------------
+
+stereoizer(delayLength) = _ <: _,widthdelay : stereopanner
+	   with{
+		W = hslider("v:Spat/spatial width", 0.5, 0, 1, 0.01);
+		A = hslider("v:Spat/pan angle", 0.6, 0, 1, 0.01);
+		widthdelay = delay(4096,W*delayLength/2);
+		stereopanner = _,_ : *(1.0-A), *(A);
+	   };

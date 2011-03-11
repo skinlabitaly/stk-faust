@@ -39,16 +39,10 @@ B = hslider("brightness [midi:ctrl 0x74]", 0.5, 0, 1, 0.01);// 0-1
 L = hslider("dynamic_level", -10, -60, 0, 1) : db2linear;
 // Note: A lively clavier is obtained by tying L to gain (MIDI velocity).
 
-// Spatial "width" (not in original EKS, but only costs "one tap"):
-W = hslider("center-panned spatial width", 0.5, 0, 1, 0.01);
-A = hslider("pan angle", 0.6, 0, 1, 0.01);
-
 //Nonlinear filter parameters
-typeModulation = checkbox("v:Nonlinear Filter/typeMod");
-signalModType = nentry("v:Nonlinear Filter/sigModType",0,0,2,1);
-nonlinearity = hslider("v:Nonlinear Filter/Nonlinearity",0,0,1,0.01) : smooth(0.999);
-frequencyMod = hslider("v:Nonlinear Filter/freqMod",220,20,1000,0.1) : smooth(0.999);
-followFreq = checkbox("v:Nonlinear Filter/followFreq");
+typeModulation = nentry("v:Nonlinear Filter/typeMod",0,0,4,1);
+nonLinearity = hslider("Nonlinearity",0,0,1,0.01) : smooth(0.999);
+frequencyMod = hslider("freqMod",220,20,1000,0.1) : smooth(0.999);
 
 //==================== SIGNAL PROCESSING ================
 
@@ -63,7 +57,8 @@ with {
   trigger(n) = diffgtz : release(n) : > (0.0);
 };
 
-P = SR/freq; // fundamental period in samples
+nlfOrder = 6;
+P = SR/freq - (nlfOrder*nonLinearity)*(typeModulation<2) ; // fundamental period in samples
 Pmax = 4096; // maximum P (for delay-line allocation)
 
 ppdel = beta*P; // pick position delay
@@ -86,14 +81,11 @@ loopfilter = dampingfilter2; // or dampingfilter1
 filtered_excitation = excitation : smooth(pickangle) 
 		    : pickposfilter : levelfilter(L,freq); // see filter.lib
 
-nonLinMod =  nonLinearModulator(1,followFreq,freq,signalModType,typeModulation,frequencyMod,6);
+nonLinMod =  nonLinearModulator(nonLinearity,1,freq,typeModulation,frequencyMod,nlfOrder);
+NLFM = _ <: (nonLinMod*nonLinearity,_*(1-nonLinearity) :> +)*(typeModulation < 3),nonLinMod*(typeModulation >= 3) :> _;
 
-stringloop = (+ : fdelay4(Pmax, P-2)) ~ (loopfilter : nonLinMod);
+stringloop = (+ : fdelay4(Pmax, P-2)) ~ (loopfilter : NLFM);
 
-// Second output decorrelated somewhat for spatial diversity over imaging:
-widthdelay = delay(Pmax,W*P/2);
+stereo = stereoizer(P);
 
-// Assumes an optionally spatialized mono signal, centrally panned:
-stereopanner = _,_ : *(1.0-A), *(A);
-
-process = filtered_excitation : stringloop <: _,widthdelay : stereopanner ;
+process = filtered_excitation : stringloop : stereo;
