@@ -68,7 +68,7 @@ stringFilter = _*0.95 : -onePole(b0,a1)
 	};
 
 nlfOrder = 6; 
-envelopeMod = invSineEnv(nonLinAttack,gate);
+envelopeMod = asr(nonLinAttack,100,envelopeRelease,gate);
 nonLinMod =  nonLinearModulator(nonLinearity,envelopeMod,freq,typeModulation,frequencyMod,nlfOrder);
 NLFM = _ <: (nonLinMod*nonLinearity,_*(1-nonLinearity) :> +)*(typeModulation < 3),nonLinMod*(typeModulation >= 3) :> _;
 

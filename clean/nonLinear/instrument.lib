@@ -69,15 +69,22 @@ with {
     };
 };
 
+/*
 //----------------------- INVERSE SINE ATTACK ----------------------------
 
-invSineEnv(a,trig) = invSin*((cntSamp <= (a*float(SR)/4)) & (trig > 0)) + 1*(cntSamp > (a*float(SR)/4)) //+ invSin2*((trig < 1) & (cntSamp2 <= r*float(SR)/4))
+invSineEnv(a,r,trig) = invSin*((cntSamp <= (a*float(SR)/4)) & (trig > 0)) + 1*((cntSamp > (a*float(SR)/4)) & (trig > 0)) + 
+invSin2*update*((trig < 1) & (cntSamp <= r*float(SR)/4))
 	    with{
-		cntSamp = (+(1)*(trig)~_ ) - 1;
-		//cntSamp2 = (+(1)*(trig<1)~_ ) - 1;
+		att = a*SR : float;
+		rel = r*SR : float;
+		update = ((cntSamp' < att) & (trig < 1)) <: *(cntSamp'/att) + (_<1);
+		//update = ((1 - _/att)*rel)*((_ < att) & (trig < 1) & (trig != trig'));
+		cntSamp = (_ <: (+(1))*(trig == trig'))~_ : -(1);
+		//cntSamp = (+(1)*((trig == trig')))~_ : -(1);
 	    	invSin = float(cntSamp)*(2.0*PI)/float(a*SR) + 1.5*PI : sin : +(1.0); 
-		//invSin2 = float(cntSamp)*(2.0*PI)/float(r*SR) + PI : sin : +(1.0);
+		invSin2 = float(cntSamp)*(2.0*PI)/float(r*SR) + PI : sin : +(1.0);
 	    };
+*/
 
 //========================= TABLES ===============================
 

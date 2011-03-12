@@ -1,8 +1,0 @@
-#N canvas 449 35 550 665 10;
-#X obj 124 69 midi-in;
-#X obj 321 542 dac~;
-#X obj 123 121 fm;
-#X connect 0 0 2 0;
-#X connect 0 1 2 1;
-#X connect 2 1 1 0;
-#X connect 2 2 1 1;

@@ -45,7 +45,7 @@ reedTableSlope = -0.44 + (0.26*reedStiffness);
 reedTable = reed(reedTableOffset,reedTableSlope);
 
 nlfOrder = 6; 
-envelopeMod = invSineEnv(nonLinAttack,gate);
+envelopeMod = asr(nonLinAttack,100,envelopeRelease,gate);
 nonLinMod =  nonLinearModulator(nonLinearity,envelopeMod,freq,typeModulation,frequencyMod,nlfOrder);
 NLFM = _ <: (nonLinMod*nonLinearity,_*(1-nonLinearity) :> +)*(typeModulation < 3),nonLinMod*(typeModulation >= 3) :> _;
 

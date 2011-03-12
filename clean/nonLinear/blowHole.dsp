@@ -74,7 +74,7 @@ toneHoleFilter = _*1 : poleZero(b0,-1,a1)
 	};
 
 nlfOrder = 3;
-envelopeMod = invSineEnv(nonLinAttack,gate);
+envelopeMod = asr(nonLinAttack,100,envelopeRelease,gate);
 nonLinMod =  nonLinearModulator(nonLinearity,envelopeMod,freq,typeModulation,frequencyMod,nlfOrder);
 NLFM = _ <: (nonLinMod*nonLinearity,_*(1-nonLinearity) :> +)*(typeModulation < 3),nonLinMod*(typeModulation >= 3) :> _;
 
