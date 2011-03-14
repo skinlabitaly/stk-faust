@@ -69,6 +69,21 @@ with {
     };
 };
 
+//----------------------- ASYMPT60 ----------------------------
+
+asympT60(value,trgt,T60,trig) = (_*factor + constant)~_
+	with{
+		cntSample = _*trig + 1~_ : _ - 1;
+		attDur = 2 : float;
+		cndFirst = ((cntSample < attDur) & (trig > 0));
+		target = value*cndFirst + trgt*(cndFirst < 1);
+		factorAtt = exp(-7/attDur);
+		factorT60 = exp(-7/(T60*float(SR)));
+		factor = factorAtt*((cntSample < attDur) & (trig > 0)) + 
+		       ((cntSample >= attDur) | (trig < 1))*factorT60;
+		constant = (1 - factor)*target;	
+	};
+
 //========================= TABLES ===============================
 
 //----------------------- TOOLS ----------------------------
@@ -95,6 +110,10 @@ reed(offset,slope) = reedTable(_) : saturationPos : saturationNeg
 //----------------------- ONE POLE ----------------------------
 
 onePole(b0,a1,x) = (b0*x - a1*_)~_;
+
+//----------------------- ONE POLE SWEPT ----------------------------
+
+onePoleSwep(a1,x) = (1 + a1)*x - a1*x';
 
 //----------------------- POLE ZERO ----------------------------
 
@@ -132,6 +151,37 @@ bandPassH(resonance,radius) = TF2(b0,b1,b2,a1,a2)
 // Jet Table: flue jet non-linear function, computed by a polynomial calculation
 	
 jetTable(x) = x <: _*(_*_-1) : saturationPos : saturationNeg;
+
+//----------------------- NON LINEAR MODULATOR ----------------------------
+//REFERENCE:
+//	- nonLinearity = nonlinearity coefficient between 0 and 1 
+//	- env = input to connect any kind of envelope
+//	- freq = current tone frequency
+//	- typeMod = if 0: theta is modulated by the incoming signal ;
+//	  	    if 1: theta is modulated by the averaged incoming signal ;
+//		    if 2: theta is modulated by the squared incoming signal ;
+//	  	    if 3: theta is modulated by a sine wave of frequency freqMod ;
+//		    if 4: theta is modulated by a sine wave of frequency freq
+//	- freqMod = frequency of the sine wave modulation
+//	- order = order of the filter
+ 
+nonLinearModulator(nonlinearity,env,freq,typeMod,freqMod,order) = 
+	_ <: nonLinearFilterOsc*(typeMod >= 3),nonLinearFilterSig*(typeMod < 3) :> +
+	with{
+		freqOscMod = (typeMod == 4)*freq + (typeMod != 4)*freqMod;
+
+		tsignorm(x) = nonlinearity * PI * x * env;
+		tsigsquared(x) = nonlinearity * PI * x * x * env;
+		tsigav(x) = nonlinearity * PI * ((x + x')/2) * env;
+
+		tsig(x) = tsignorm(x)*(typeMod == 0) + tsigav(x)*(typeMod == 1) 
+			  + tsigsquared(x)*(typeMod == 2);
+
+		tosc = nonlinearity * PI * osc(freqOscMod) * env; 
+
+		nonLinearFilterSig(x) = x <: allpassnn(order,(par(i,order,tsig(x))));
+		nonLinearFilterOsc = _ <: allpassnn(order,(par(i,order,tosc)));
+	};
 	
 //========================= WAVE TABLES ===============================
 
@@ -144,3 +194,15 @@ marmstk1TableSize = 246;
 
 readImpuls20 = ffunction(float readImpuls20(int), <instrument.h>,"");
 impuls20TableSize = 256;
+
+//========================= TOOLS ===============================
+
+//----------------------- STEREOIZER ----------------------------
+
+stereoizer(delayLength) = _ <: _,widthdelay : stereopanner
+	   with{
+		W = hslider("v:Spat/spatial width", 0.5, 0, 1, 0.01);
+		A = hslider("v:Spat/pan angle", 0.6, 0, 1, 0.01);
+		widthdelay = delay(4096,W*delayLength/2);
+		stereopanner = _,_ : *(1.0-A), *(A);
+	   };
