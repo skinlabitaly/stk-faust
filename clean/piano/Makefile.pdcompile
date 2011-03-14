@@ -3,9 +3,6 @@
 ### Build puredata externals on Darwin or Linux
 ###
 
-# Works on 64-bit Mac OS X:
-# CPUARCH := i686 -m32
-
 system			:= $(shell uname -s)
 DEST			:= pddir/
 dspsrc  		:= $(wildcard *.dsp)
@@ -13,13 +10,16 @@ cppsrc  		:= $(addprefix $(DEST), $(dspsrc:.dsp=.cpp))
 patches			:= $(addprefix $(DEST),  $(dspsrc:.dsp=.pd))
 FAUST2PD 		:= faust2pd
 F2PDFLAGS 		:= -n 8 -s
+PDINCLUDE		:= -I /usr/include/pdextended
+
+# (PDINCLUDE must locate m_pd.h)
 
 ###--------------------------------------------
 ### compilation flags for Linux
 ###
 LINUXCFLAGS 	:= -DPD -O2 -funroll-loops -fomit-frame-pointer -fPIC \
     -Wall -W -Wshadow -Wno-unused -Wno-parentheses -Wno-switch $(CFLAGS)
-LINUXINCLUDE 	:=
+LINUXINCLUDE 	:= -I ./
 
 ###--------------------------------------------
 ### compilation flags for Darwin
@@ -69,7 +69,7 @@ $(DEST)%.pd: %.dsp
 	rm -f $<.xml
 
 $(DEST)%~.pd_linux: $(DEST)%.cpp
-	$(CXX) $(LINUXCFLAGS) $(LINUXINCLUDE) -shared -Dmydsp=$(patsubst %~.pd_linux,%,$(notdir $@)) $< -o $@
+	$(CXX) $(LINUXCFLAGS) $(LINUXINCLUDE) $(PDINCLUDE) -shared -Dmydsp=$(patsubst %~.pd_linux,%,$(notdir $@)) $< -o $@
 
 $(DEST)%~.pd_darwin: $(DEST)%.cpp
 	$(CXX) $(DARWINCFLAGS) $(DARWININCLUDE) $(DYNLOAD_FLAGS) $(OPTIONAL) -Dmydsp=$(patsubst %~.pd_darwin,%,$(notdir $@)) $< -o $@

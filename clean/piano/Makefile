@@ -9,7 +9,7 @@ plot :
 jackqt :
 	install -d jackqtdir
 	$(MAKE) DEST='jackqtdir/' ARCH='jack-qt.cpp' LIB='-ljack' -f Makefile.qtcompile
-	
+
 svg:
 	$(MAKE) -f Makefile.svgcompile
 

@@ -1,5 +1,5 @@
 #N canvas 1464 349 357 464 10;
-#X obj 46 95 piano;
+#X obj 46 129 harpsi;
 #X obj 46 30 midi-in 8;
 #X obj 46 260 audio-out;
 #X connect 0 0 2 0;
