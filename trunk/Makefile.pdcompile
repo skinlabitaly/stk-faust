@@ -9,7 +9,7 @@ dspsrc  		:= $(wildcard *.dsp)
 cppsrc  		:= $(addprefix $(DEST), $(dspsrc:.dsp=.cpp))
 patches			:= $(addprefix $(DEST),  $(dspsrc:.dsp=.pd))
 FAUST2PD 		:= faust2pd
-F2PDFLAGS 		:= -s
+F2PDFLAGS 		:= -n 4 -s
 OPTIONAL := -I ./
 
 ###--------------------------------------------
