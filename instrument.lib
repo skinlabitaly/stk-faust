@@ -1,6 +1,6 @@
 //instrument.lib - Faust function of various types usefull for building physical model instruments 
 
-declare name "Faust Instument Tools Library";
+declare name "Faust-STK Tools Library";
 declare author "Romain Michon (rmichon@ccrma.stanford.edu)";
 declare copyright "Romain Michon";
 declare version "1.0";
@@ -76,11 +76,20 @@ with {
 };
 
 //----------------------- ASYMPT60 ----------------------------
+// Envelope generator which asymptotically approaches a target value.
+//
+// USAGE: 
+//   asympT60(value,trgt,T60,trig) : _
+// where
+//   value = starting value
+//   trgt = target value
+//   T60 = ramping time
+//   trig = trigger signal 
 
 asympT60(value,trgt,T60,trig) = (_*factor + constant)~_
 	with{
-		cntSample = _*trig + 1~_ : _ - 1;
-		attDur = 2 : float;
+		cntSample = *(trig) + 1~_ : -(1);
+		attDur = float(2);
 		cndFirst = ((cntSample < attDur) & (trig > 0));
 		target = value*cndFirst + trgt*(cndFirst < 1);
 		factorAtt = exp(-7/attDur);
@@ -92,12 +101,24 @@ asympT60(value,trgt,T60,trig) = (_*factor + constant)~_
 
 //========================= TABLES ===============================
 
-//----------------------- TOOLS ----------------------------
+//----------------------- CLIPPING FUNCTION ----------------------------
+// Positive and negative clipping functions.
+//
+// USAGE: 
+//   _ : saturationPos : _
+//   _ : saturationNeg : _
+//   _ : saturationPos : saturationNeg : _
 
-saturationPos(x) = x<: (_>1),(_<=1 : _*x) :> _+_;
-saturationNeg(x) = x<: (_<-1),(_>=-1 : _*x) :> _*-1+_;
+saturationPos(x) = x <: (_>1),(_<=1 : *(x)) :> +;
+saturationNeg(x) = x <: (_<-1),(_>=-1 : *(x)) :> *(-1) + _;
 
 //----------------------- BOW TABLE ----------------------------
+// Simple bow table.
+//
+// USAGE: 
+//   index : bow(offset,slope) : _
+// where
+//   0 <= index <= 1 
 
 bow(offset,slope) = pow(abs(sample) + 0.75, -4) : saturationPos
 	with{
@@ -158,6 +179,13 @@ bandPass(resonance,radius) = TF2(b0,b1,b2,a1,a2)
 	};
 
 //----------------------- BANDPASS FILTER BASED ON A BIQUAD ----------------------------
+// Band pass filter using a biquad (TF2 is declared in filter.lib)
+//
+// USAGE:
+//   _ : bandPassH(resonance,radius) : _
+// where
+//   resonance = center frequency
+//   radius = radius
 
 bandPassH(resonance,radius) = TF2(b0,b1,b2,a1,a2)
 	with{
@@ -220,11 +248,19 @@ nonLinearModulator(nonlinearity,env,freq,typeMod,freqMod,order) =
 //========================= WAVE TABLES ===============================
 
 //----------------------- STICK IMPACT ----------------------------
+// Stick impact table.
+//
+// USAGE:
+//   index : readMarmstk1 : _
 
 readMarmstk1 = ffunction(float readMarmstk1 (int), <instrument.h>,"");
 marmstk1TableSize = 246;
 
 //----------------------- VOICE IMPULSE ----------------------------
+// Voice impulse table.
+//
+// USAGE:
+//   index : readIpuls20 : _
 
 readImpuls20 = ffunction(float readImpuls20(int), <instrument.h>,"");
 impuls20TableSize = 256;
