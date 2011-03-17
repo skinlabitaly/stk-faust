@@ -1,11 +1,11 @@
-#N canvas 259 22 993 749 10;
+#N canvas 259 22 1020 731 10;
 #X obj 379 10 midi-in 4;
-#X msg 625 532 \; pd dsp 1;
-#X msg 625 570 \; pd dsp 0;
-#X obj 376 566 audio-out;
-#X obj 24 79 flute;
-#X obj 497 78 flutestk;
-#X obj 376 450 freeverb;
+#X msg 649 523 \; pd dsp 1;
+#X msg 649 561 \; pd dsp 0;
+#X obj 391 553 audio-out;
+#X obj 35 84 NLFfm;
+#X obj 528 83 voiceForm;
+#X obj 391 437 freeverb;
 #X connect 0 0 4 0;
 #X connect 0 0 5 0;
 #X connect 0 1 4 1;
