@@ -9,8 +9,8 @@ dspsrc  		:= $(wildcard *.dsp)
 cppsrc  		:= $(addprefix $(DEST), $(dspsrc:.dsp=.cpp))
 patches			:= $(addprefix $(DEST),  $(dspsrc:.dsp=.pd))
 FAUST2PD 		:= faust2pd
-F2PDFLAGS 		:= -n 4 -s
-OPTIONAL := -I ./
+OPTIONAL 		:= -I ./
+FREEVERB 		:= freeverb.dsp.xml
 
 ###--------------------------------------------
 ### compilation flags for Linux
@@ -60,7 +60,11 @@ $(DEST)%.cpp: %.dsp
 	
 $(DEST)%.pd: %.dsp
 	faust -xml $< -o /dev/null
-	$(FAUST2PD) $(F2PDFLAGS) $<.xml
+	#ifeq ($<.xml,$(FREEVERB))
+	#	$(FAUST2PD) -s freeverb.dsp.xml
+	#else
+		$(FAUST2PD) $(F2PDFLAGS) $<.xml
+	#endif
 	mv $(<:.dsp=.pd) $(DEST)
 	rm -f $<.xml
 
