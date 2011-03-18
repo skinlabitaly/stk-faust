@@ -54,7 +54,7 @@ NLFM =  nonLinearModulator((nonLinearity : smooth(0.999)),envelopeMod,freq,
 
 //lips are simulated by a biquad filter whose output is squared and hard-clipped, bandPassH and saturationPos are declared in instrument.lib
 lipFilterFrequency = freq*pow(4,(2*lipTension)-1);
-lipFilter = bandPassH(lipFilterFrequency,0.997) <: * : saturationPos;
+lipFilter = *(0.03) : bandPassH(lipFilterFrequency,0.997) <: * : saturationPos;
 
 //stereoizer is declared in instrument.lib and implement a stereo spacialisation in function of 
 //the frequency period in number of samples 
@@ -79,7 +79,7 @@ borePressure = *(0.85);
 //differencial presure
 deltaPressure = mouthPressure - _;
 
-process = (borePressure <: deltaPressure,_ : *(0.03),_ : 
+process = (borePressure <: deltaPressure,_ : 
 	  (lipFilter <: *(mouthPressure),(1-_)),_ : _, * :> + :
 	  dcblocker) ~ (boreDelay : NLFM) :
 	  *(gain) : stereo;
