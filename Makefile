@@ -129,7 +129,7 @@ osswx :
 
 pagtk :
 	install -d pagtkdir
-	$(MAKE) DEST='pagtkdir/' ARCH='pa-gtk.cpp' LIB='-lpthread  -lportaudio `pkg-config gtk+-2.0  --cflags --libs`' -f Makefile.compile
+	$(MAKE) DEST='pagtkdir/' ARCH='pa-gtk.cpp' LIB='-I ./ -lpthread  -lportaudio `pkg-config gtk+-2.0  --cflags --libs`' -f Makefile.compile
 
 pawx :
 	install -d pawxdir
