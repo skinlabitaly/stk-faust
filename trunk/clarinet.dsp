@@ -81,10 +81,10 @@ breathPressure = breath + breath*vibrato;
 
 process =
 	//Commuted Loss Filtering
-	(filter*-0.95 - breathPressure <: 
+	(_,(breathPressure <: _,_) : (filter*-0.95 - _ <: 
 	
 	//Non-Linear Scattering
-	reedTable*_ + breathPressure) ~ 
+	*(reedTable)) + _) ~ 
 	
 	//Delay with Feedback
 	(delayLine : NLFM) : 
