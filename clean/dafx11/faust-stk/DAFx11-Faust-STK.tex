@@ -70,7 +70,9 @@
 %}
 
 \twoaffiliations{
-\paperauthorA,\sthanks{CCRMA visiting researcher from Saint \'Etienne University, France, supported by the ASTREE Project}}
+\paperauthorA,\sthanks{CCRMA visiting researcher from Saint \'Etienne
+  University, France. Work carried out in the frame of the ASTREE
+  Project (ANR-08-CORD-003).}}
 {\href{http://ccrma.stanford.edu/~rmichon}{CIEREC, EA 3068} \\ Université Jean
   Monnet \\ F-42023, Saint-Etienne, France \\
 {\tt \href{mailto:rmichon@ccrma.stanford.edu}{rmichon@ccrma.stanford.edu}}
@@ -101,32 +103,19 @@ The Faust-STK.
 
 \section{Waveguide Models}\label{sec:waveguideModels}
 
-Waveguide synthesis was created by Julius O. Smith during the
+Waveguide synthesis was created by J. O. Smith during the
 eighties \cite{waveGuide}. It is based on a modified version of the
 Karplus-Strong algorithm \cite{KS} that makes it possible to model any
-kind of strings, bores or vibrating structures with a network of delay
+kind of string, bore or vibrating structures with a network of delay
 lines and filters. Waveguide instruments appears to be very suitable to be implemented with
 the FAUST language mainly because of their ``stream like''
 architecture.   
 
-The following instruments based on the waveguide synthesis technique were implemented in the {\it Faust-STK}:
-
-\begin{itemize}
-\item two clarinets;
-\item two flutes;
-\item one saxophone;
-\item two models of brass instrument;
-\item one iron plaque;
-\item one wooden plaque;
-\item a tibetan bowl;
-\item a glass plaque.
-\end{itemize}
-
-A brief overview of these models is done in this section.
+A brief overview of the {\it Faust-STK} waveguide instruments is done in this section.
 
 \subsection{Wind Instruments}
 
-Algorithms used in the {\it Faust-STK} are almost all based on
+The algorithms used in the {\it Faust-STK} are almost all based on
 instruments implemented in the {\it Synthesis ToolKit} and the program
 {\it SynthBuilder}. Although, it is important to observe that some of
 them were slightly modified in order to adapt them to the FAUST semantic.
@@ -136,40 +125,162 @@ defined in the default FAUST libraries to build our models, we needed
 most of the time to write our own filters in order to be able to use the
 parameters from the {\it STK} classes and the {\it SynthBuilder}
 patches. All these functions were put a in file called
-\texttt{filter.lib}.
+\texttt{instrument.lib}.
+
+All the wind instruments implemented in the {\it Faust-STK} are based
+on a similar architecture. Indeed, in most cases, the breath pressure
+that correspond to the amplitude of the excitation is controlled by an
+envelope. The excitation is used to feed one or several waveguides that
+implements the body of the instrument. For example, in the case of a
+clarinet, the excitation corresponds to the reed that vibrates in the
+mouthpiece and the body of the instrument is the bore and the bell. 
+In figure \ref{fig:clarinet}, it is possible to see the block diagram
+of one of the two clarinet models that are implemented in the {\it
+  Faust-STK}. In that case, an ADSR\footnote{Attack - Decay - Sustain -
+  Release.} envelope that is embedded in the {\it breathPressure} box
+controls the breath pressure.
+
+The other clarinet implemented in the {\it Faust-STK} is a bit
+  more complex as it has a tone hole model that makes it possible
+  to change the pitch of the note being played in a more natural
+  way. Indeed, in the algorithm showed in figure \ref{fig:clarinet}
+  and as in most of the basic waveguide models,
+  the pitch is modulated by changing the length of the loop delay line
+  which would correspond in ``the real world'' to changing dynamically
+  the size of the clarinet's bore during the performance which is of
+  course impossible.    
 
 \begin{figure}[ht]
 \begin{center}
         \framebox{\includegraphics[width=\columnwidth]{fig/clarinet.pdf}}
-\caption{{\it Synthesis part of the PureData polyphonic sub-patch
-    generated with faust2pd from ``piano.dsp''. In the current case, a
-  height voices polyphony synthesizer is implemented so
-  piano$\sim$.dsp is called height times.}}
+\caption{{\it \texttt{clarinet.dsp} algorithm drawn by FAUST using faust2pd.}}
 \label{fig:clarinet}
 \end{center}
 \end{figure}
 
-\subsection{String Instruments}
+The reed table employed with the two clarinets to excite the model was
+also used to create a very simple saxophone model that is even more
+comparable to a violin whose strings are excited by a reed.   
 
-\subsection{Drums}\label{subsec:drums}
+Two models of flute are implemented in the {\it Faust-STK}. The first one
+is based on the algorithm used in the {\it Synthesis ToolKit} that is a
+simplified version of \cite{jet}. The other model is showed in figure
+\ref{fig:flute}. It uses a two loops
+and a more sophisticated jet filter (a butterworth filter is used instead of
+a simple one pole).    
 
+\begin{figure}[ht]
+\begin{center}
+        \framebox{\includegraphics[width=\columnwidth]{fig/flute.pdf}}
+\caption{{\it \texttt{flute.dsp} algorithm drawn by FAUST using faust2pd.}}
+\label{fig:flute}
+\end{center}
+\end{figure}
 
-\section{Modal Models}
+A simple model of a brass instrument inspired from a class of the {\it Synthesis
+  ToolKit} and with a mouthpiece based on the model presented in
+\cite{brassMouth} is implemented in the {\it Faust-STK}. It can be used to
+emulate a wide range of instrument such as a french horn, a
+trumpet or even a trombon. Its algorithm can be seen in figure \ref{fig:brass}.  
+
+\begin{figure*}[ht]
+\begin{center}
+        \framebox{\includegraphics[width=\textwidth]{fig/brass.pdf}}
+\caption{{\it \texttt{brass.dsp} algorithm drawn by FAUST using faust2pd.}}
+\label{fig:brass}
+\end{center}
+\end{figure*}
+
+Finally, a tuned bottle where it is possible to blow through the neck
+to make sound is also implemented in the {\it Faust-STK}.
+
+\subsection{String Instruments}\label{subsec:strings}
+
+Some of the waveguide algorithms for plucked strings have
+already been implemented in FAUST by J. O. Smith that worked in
+\cite{faustEks} on the extended Karplus-Strong. Although, it is
+possible to find in the {\it Faust-STK} a few models of string
+instruments such as a Sitar, a bowed string instrument, a nonlinear
+extended Karplus-Strong (Cf. \ref{sec:NLF} about nonlinear waveguide models), an acoustic bass, a piano and
+an harpsichord (Cf. \ref{sec:keyboards} about keyboards instruments in
+the {\it Faust-STK}). 
+
+Except the nonlinear extended Karplus-Strong,
+all this algorithms are inspired from the {\it Synthesis ToolKit} and
+the program {\it SynthBuilder}.   
+
+\subsection{Percussion Instruments}\label{subsec:drums}
+
+Four objects in the {\it Faust-STK} use the banded waveguide
+synthesis technique (described in \cite{bdWaveGuides}) to model the following percussion instruments:
+\begin{itemize}
+\item an iron plaque;
+\item a wooden plaque;
+\item a glass plaque;
+\item a tibetan bowl.
+\end{itemize}
+
+Each of them can be excited with a bow or a hammer.
+
+\section{Using nonlinear passive allpass filter with waveguide models}\label{sec:NLF}
+
+Some of the instruments implemented in the {\it Faust-STK} are using
+nonlinear passive allpass filters in order to generate nice natural and
+unnatural sound effects. 
+The allpass Ladder and Latice filters described in \cite{linearSpeech}
+makes it possible to create nonlinear behavior when they are used in
+waveguide algorithms. The nonlinearities are generated by
+dynamicaly modulating the filter coefficients at every sample. For the
+instruments that use this kind of filter in the
+{\it Faust-STK}, the user can decide whether the coefficients are
+modulated by the incoming signal or by a sine wave. In both cases, a
+``nonlinearity factor'' parameter scale the range of the modulation of the
+filter coefficients. This parameter can be controlled by an envelope
+in order to make the nonlinear behavior more natural.
+  
+It is necessary to adjust the length of the delay line of the
+instruments that use nonlinear allpass filters in function of the
+nonlinearity factor and of the order of the filter as follow:
+\begin{equation}
+DL = (SR/F) - FO.NF 
+\end{equation}
+where DL is the delay length in number of samples, SR is the sampling
+rate, F is the pitch frequency, FO is the filter order and NF the
+nonlinearity factor (value between 0 and 1).
+
+Typically, the nonlinear allpass filter has to be placed just before
+the feedback of the waveguide loop as showed in figure \ref{fig:clarinetNL}.
+
+\begin{figure}[ht]
+\begin{center}
+        \framebox{\includegraphics[width=\columnwidth]{fig/clarinetNL.pdf}}
+\caption{{\it Modified version of \texttt{clarinet.dsp} (Cf. figure
+    \ref{fig:clarinet}) that uses a nonlinear allpass filter in its
+    feedback loop.}}
+\label{fig:clarinetNL}
+\end{center}
+\end{figure}
+
+Finally, it is interesting to mention that we were able to implement a
+frequency modulation synthesizer in the {\it Faust-STK} by using this
+kind of filter on a sine wave signal. 
+
+\section{Modal Models}\label{sec:modal}
 
 A set of instruments using modal synthesis can be found in the {\it
-  FAUST-STK}. They are all implemented in the same object as they are based on the same algorithm.
+  Faust-STK}. They are all implemented in the same code as they are based on the same algorithm.
 
-Modal synthesis was discovered by J-M. Adrien in eighties \cite{} and
+Modal synthesis was discovered by J-M. Adrien in the eighties \cite{modal} and
 is very similar to the technique used in \ref{subsec:drums} as it
 consists in exciting a filter bank with an impulsion (figure
 \ref{fig:modal}).
 
-Implementing modal syntheis with FAUST was a bit chalenging. Indeed,
+Implementing modal synthesis with FAUST was a bit chalenging. Indeed,
 it requires to handle an important amount of values and to use an
 excitation signal stored in a wave file. The first problem was solved
 by using the foreign function primitive in FAUST that allows to use
 C++ function within a FAUST code. The different values were stored in
-float array used in a function that takes an index as an argument and
+an array of floats used in a function that takes an index as an argument and
 that returns the corresponding number.
 
 In order to solve the other problem about importing a wave table in a
@@ -177,31 +288,36 @@ FAUST object from a wave file, we first tried to use the
 \texttt{libsndfile} library developed by E. de Castro Lopo
 \cite{libsndfile} that makes it possible to easily handle wave files
 in C++. Unfortunately, it appears that this solution was not
-compatible with all the FAUST architecture. Based on this observation
-and the fact that the wave tables used in the STK have a maximal size
+compatible with all the FAUST architectures. Based on this observation
+and the fact that the wave tables used in the STK had a maximal size
 of 1024 samples, we decided to use
 the same technique than the one previously explained. Indeed, the raw
-datas were extracted from the wave file to be put in float arrays that
+datas were extracted from the wave file to be put in an array of floats that
 can be used in a C++ function to return the values with an index. This
 C++ function can then be called in FAUST using the foreign function
 mechanism to fill a buffer with the \texttt{rdtable} primitive.   
 
-\begin{figure}[ht]
+\begin{figure*}[ht]
 \begin{center}
-        \framebox{\includegraphics[width=\columnwidth]{fig/modalBar.pdf}}
-\caption{{\it Synthesis part of the PureData polyphonic sub-patch
-    generated with faust2pd from ``piano.dsp''. In the current case, a
-  height voices polyphony synthesizer is implemented so
-  piano$\sim$.dsp is called height times.}}
+        \framebox{\includegraphics[width=\textwidth]{fig/modalBar.pdf}}
+\caption{{\it \texttt{modalBar.dsp} algorithm drawn by FAUST using faust2pd.}}
 \label{fig:modal}
 \end{center}
-\end{figure}
+\end{figure*}
 
-\section{}
+\section{Voice Synthesis}
 
-\section{Using nonlinear ladder filter with waveguide models}
+A very simple voice synthesizer based on the algorithm from
+the {\it Synthesis ToolKit} is implemented in the {\it FAUST-STK}. It
+uses a wave table to excite a bank of 4 bandpass filters that shape
+the voice formants. The formant values are stored in a C++ function in the
+same way than described in \ref{sec:modal} as a set of center
+frequencies, amplitudes and bandwidths. This function is then called
+in the FAUST code using the foreign function primitive. The thirty-two
+phonemes stored in this function are the same than the one from the
+{\it Synthesis ToolKit}. 
 
-\section{Piano Synthesis in Faust} 
+\section{Keyboards}\label{sec:keyboards}
 
 A {\it SynthBuilder} patch implementing a commuted piano \cite{commutedPiano} has been
 written in the late nineties at Stanford's CCRMA. This patch was partly
@@ -210,7 +326,7 @@ ported in 2006 by Stephen Sinclair at McGill University in the {\it
 in extracting the values for each parameters from the {\it
   SynthBuilder} patch to store them in a set of C++ functions. We
 reused them to build our FAUST commuted piano version by using the
-{\it foreign function} mechanism as described is section \ref{}.
+{\it foreign function} mechanism as described in \ref{sec:modal}.
 
 In this piano model, the keyboard is splited in two part which use a
 different algorithm. Indeed, the tones
@@ -230,11 +346,15 @@ sound (figure \ref{fig:piano}).
 \end{center}
 \end{figure}
 
-The current FAUST version of the commuted piano is not a polyphonic
+A commuted harpsichord has also been implemented in the {\it FAUST-STK}. It
+was inspired by another {\it SynthBuilder} patch that uses a very
+similar algorithm to the one described above. 
+
+The current FAUST versions of the commuted piano and harpsichord is not a polyphonic
 instrument. However, the {\it faust2pd} program developed by Albert
 Graef \cite{faust2pd} makes it possible to automatically produce {\it PureData}
-patches that implement polyphonic synthesizers based on FAUST generated
-PD-plug-ins. They can then be controlled via MIDI or OSC directly in
+patches that implement polyphonic synthesizers that use FAUST generated
+PD plug-ins. They can then be controlled via MIDI or OSC directly in
 PureData.    
 
 \begin{figure}[ht]
@@ -251,7 +371,7 @@ PureData.
 \section{Using a FAUST-STK physical model with gesture following
   datas}
 
-Parameter values are very important when dealing physical
+Parameter values are very important when dealing with physical
 modeling. Indeed, even if in most cases it is possible to produce nice
 sounds with static values for each parameter, the sound quality can be
 improved a lot by using dynamic values that can describe better the state
@@ -260,8 +380,8 @@ of the model in function of the note and the amplitude being played.
 E. Maestre worked during his phd on modeling the instrumental gesture
 for the violin \cite{Esteban} at the MTG\footnote{Music Technology
   Group, University Pompeu Fabra, Barcelona (Spain).}. With his help,
-it was possible to modify the algorithm of the bowed instrument
-presented previously in \ref{} in order to make it compatible to
+it was possible to modify the algorithm of the bowed instrument from
+the {\it STK} in order to make it compatible to
 gesture datas. The following changes were performed on the model:
 \begin{itemize}
 \item the {\it ADSR} used to control the bow velocity was removed;
@@ -270,15 +390,16 @@ gesture datas. The following changes were performed on the model:
 \item a switch was added at the output of the bow table;
 \item we created a four strings violin where it is possible to modify
   the value of the parameters of each string independently;
-\item the simple body filter was replaced by a biquad bank that apply
-  a violin impulse response on the generated sound.  
+\item the simple body filter was replaced by a bank of biquad filters that apply
+  a violin impulse response on the generated sound
+\item an improved reflexion filter also based on a bank of
+  biquad is used.  
 \end{itemize}
 
-The FAUST code was used to create a {\it PureData} plug-in using
-the \texttt{puredata.cpp} architecture file. The gesture datas for
+The FAUST code was used to create a {\it PureData} plug-in. The gesture datas for
 each physical parameter (note frequencies, bow position, bow velocity,
 bow force and number of the string to be used) of the violin model
-were placed in separated text files to be used in a {\it PD} patch. In
+were placed in separated text files that can be used in a {\it PD} patch. In
 the example shown in figure \ref{fig:subPatchViolin}, the values are
 changed every 4.167 milliseconds. The gesture datas used plays a
 traditional spanish song called Muiñeira.     
@@ -298,7 +419,7 @@ traditional spanish song called Muiñeira.
 
 Digital signal processing algorithms can be expressed very shortly in
 FAUST. The gain in term of code size with C++ or even matlab
-implementation is most of the time very significant. Thereby, we tried
+implementations is most of the time very significant. Thereby, we tried
 to make the {\it FAUST-STK} algorithms as concise and readable as
 possible.
 
@@ -311,7 +432,7 @@ algorithm itself.
 
 Nevertheless, we were able to carry out such a comparison as a rough
 guide. We took into account in FAUST as in C++ the implementation of the
-algorithm itself and the line of codes concerning parameters
+algorithm itself and the line concerning parameters
 handling. 
 
 The result of this comparison can be seen in table \ref{tab:nblines}. Once again, even if its results are certainly arguable, it
@@ -345,7 +466,7 @@ piano.dsp * & 292 & 158 & {\bf 45.9\%} & 750 & 246 & {\bf 67.2\%} \\
 \end{center}
 \caption{{\it Comparison of the code size of the STK object's C++ code
     with the FAUST code from FAUST-STK. The number of declarations was
-    calculated in both cases by counting the number semicolon in the
+    calculated in both cases by counting the number of semicolons in the
     code. In the case of the
     instruments where the file name is followed by the
   * sign, parameters data-bases were not taken into account.}}
@@ -357,7 +478,7 @@ piano.dsp * & 292 & 158 & {\bf 45.9\%} & 750 & 246 & {\bf 67.2\%} \\
 The FAUST compiler optimizes the efficiency of its generated C++
 code. Thus, we tried to compare for some models the CPU load between
 {\it PureData} plug-ins created using the {\it stk2pd}\footnote{{\it
-    stk2pd} is a program that was developed created at Stanford's
+    stk2pd} is a program that was developed at Stanford's
   CCRMA by M. Gurevich and C. Chafe. It converts any C++ code from the {\it
   STK} into a plug-in for {\it PureData} \cite{stk2pd}.} program with
 PD plug-ins generated by FAUST using the {\it PureData} architecture
@@ -401,11 +522,6 @@ tibetanBowl.dsp & 5,74 & 2,87 & 50 \\
 \end{table}
 
 \section{Conclusions}
-This template can be found on the conference website.
-For changing the number of author affiliations (1-4), uncomment the corresponding regions in the \texttt{DAFx09\_tmpl.tex} file.
-Please, submit full-length papers (max.~8 pages both oral and poster presentations).
-Submission is fully electronic and automated through the Conference Web Submission System.
-DO NOT send us papers directly by e-mail.
 
 \section{Acknowledgments}
 Many thanks to the great number of anonymous reviewers!
