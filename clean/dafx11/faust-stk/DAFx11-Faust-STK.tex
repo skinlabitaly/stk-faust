@@ -3,7 +3,8 @@
 %------------------------------------------------------------------------------------------
 %  !  !  !  !  !  !  !  !  !  !  !  ! user defined variables  !  !  !  !  !  !  !  !  !  !  !  !  !  !
 % Please use these commands to define title and author of the paper:
-\def\papertitle{The Faust Synthesis ToolKit}
+\def\papertitle{FAUST-STK: a set of linear and nonlinear physical
+  models for the FAUST programing language}
 \def\paperauthorA{Romain Michon}
 \def\paperauthorB{Julius O. Smith}
 
@@ -62,12 +63,6 @@
 
 \title{\papertitle}
 
-%-------------SINGLE-AUTHOR HEADER STARTS (uncomment below if your paper has a single author)-----------------------
-%\affiliation{
-%\paperauthorA\mbox{ and }\paperauthorB\sthanks{CCRMA visiting researcher from Saint \'Etienne University, France, supported by the ASTREE Project}}
-%{\href{https://ccrma.stanford.edu/\~{}jos/}{Center for Computer Research in Music and Acoustics}\\ (CCRMA) Stanford University \\ Palo Alto, CA 94305, USA\\
-%{\tt \href{mailto:jos|rmichon@ccrma.stanford.edu}{jos@ccrma.stanford.edu}}
-%}
 
 \twoaffiliations{
 \paperauthorA,\sthanks{CCRMA visiting researcher from Saint \'Etienne
@@ -78,10 +73,9 @@
 {\tt \href{mailto:rmichon@ccrma.stanford.edu}{rmichon@ccrma.stanford.edu}}
 }
 {\paperauthorB,}
-{\href{https://ccrma.stanford.edu/\~{}jos/}{Center for Computer Research in Music and Acoustics}\\ (CCRMA) Stanford University \\ Palo Alto, CA 94305, USA\\
+{\href{https://ccrma.stanford.edu/\~{}jos/}{Center for Computer Research in Music and Acoustics.}\\ (CCRMA) Stanford University \\ Palo Alto, CA 94305, USA\\
 {\tt \href{mailto:jos@ccrma.stanford.edu}{jos@ccrma.stanford.edu}}
 }
-%-----------------------------------SINGLE-AUTHOR HEADER ENDS------------------------------------------------------
 
 
 \begin{document}
@@ -95,11 +89,66 @@
 \maketitle
 
 \begin{abstract}
-The Faust-STK.
+
+The {\it FAUST Synthesis ToolKit} is a set of virtual musical
+instruments written in the FAUST programming language and
+based on waveguide algorithms and on modal synthesis. Most of them
+were inspired by instruments implemented in the {\it Synthesis
+  ToolKit} and the program {\it SynthBuilder}.
+
+Our attention has partly been focused on the pedagogical aspect of the implemented
+objects. Indeed, we tried to make the FAUST code of each objects as optimized and
+as expressive as possible.
+
+Some of the instruments in the {\it FAUST-STK} use nonlinear allpass
+filters to create interesting and new behaviors. Also, a few
+of them were modified in order to use following gesture datas to
+control the performance. A demonstration of this kind of use is done
+in the {\it PureData} program.
+
+Finally, the results of some performances tests of the generated C++
+code are presented.   
 
 \end{abstract}
 
 \section{Introduction}\label{sec:intro}
+
+The {\it FAUST Synthesis ToolKit} is set of virtual musical instruments
+programmed in the FAUST\footnote{Functional AUdio STream is programming language that
+  proposes an abstract, purely functional approach to signal
+  processing. It has been developed at Lyon's GRAME (Groupe de
+  recherche en Acoustique et en Musique Electronique) since 2002:
+  \url{http://faust.grame.fr/}.} programing language. Most of them are
+based on physical models inspired from the algorithms implemented in the {\it Synthesis
+  ToolKit (STK)} \cite{STK} and the program {\it SynthBuilder}
+\cite{synthBuilder}.
+
+The {\it STK} is developed since 1996 by P. R. Cook and
+G. P. Scavone. It is a set of open source audio signal processing and
+algorithmic synthesis classes written in the C++ programming
+language that can be used in the development of music synthesis and
+audio processing
+software\footnote{\url{https://ccrma.stanford.edu/software/stk/}.}.
+
+In the other hand, {\it SynthBuilder} was a program used at Stanford's
+CCRMA\footnote{Center for Computer Research in Music and Acoustics} in
+the nineties to implement physical models of musical instruments. Most
+of its algorithms use the waveguide synthesis technique but some of
+them are also based on modal synthesis. 
+
+An important part of our work consisted at improving and simplifying
+the models from these two sources in order to make them more efficient
+thanks to the FAUST semantic. All the FAUST codes from the {\it
+  FAUST-STK} are commented and refer as often as possible to external
+bibliographical elements. Finally, lots of the algorithms from the {\it STK} and {\it
+  SynthBuilder} were upgraded with nonlinear allpass filters.
+
+First, we will present the different models of musical instruments implemented in the {\it
+  FAUST-STK}. We will discuss about the problems we encountered
+during their development and then describe the selected solutions. A
+brief overview on the use of allpass nonlinear filters with waveguide
+models will be done. Finally, we'll study the performances of the
+generated C++ code.    
 
 \section{Waveguide Models}\label{sec:waveguideModels}
 
@@ -111,11 +160,11 @@ lines and filters. Waveguide instruments appears to be very suitable to be imple
 the FAUST language mainly because of their ``stream like''
 architecture.   
 
-A brief overview of the {\it Faust-STK} waveguide instruments is done in this section.
+A brief overview of the {\it FAUST-STK} waveguide instruments is done in this section.
 
 \subsection{Wind Instruments}
 
-The algorithms used in the {\it Faust-STK} are almost all based on
+The algorithms used in the {\it FAUST-STK} are almost all based on
 instruments implemented in the {\it Synthesis ToolKit} and the program
 {\it SynthBuilder}. Although, it is important to observe that some of
 them were slightly modified in order to adapt them to the FAUST semantic.
@@ -124,10 +173,10 @@ Despite the fact that we used as often as possible functions already
 defined in the default FAUST libraries to build our models, we needed
 most of the time to write our own filters in order to be able to use the
 parameters from the {\it STK} classes and the {\it SynthBuilder}
-patches. All these functions were put a in file called
+patches. All these functions were put in a file called
 \texttt{instrument.lib}.
 
-All the wind instruments implemented in the {\it Faust-STK} are based
+All the wind instruments implemented in the {\it FAUST-STK} are based
 on a similar architecture. Indeed, in most cases, the breath pressure
 that correspond to the amplitude of the excitation is controlled by an
 envelope. The excitation is used to feed one or several waveguides that
@@ -136,11 +185,11 @@ clarinet, the excitation corresponds to the reed that vibrates in the
 mouthpiece and the body of the instrument is the bore and the bell. 
 In figure \ref{fig:clarinet}, it is possible to see the block diagram
 of one of the two clarinet models that are implemented in the {\it
-  Faust-STK}. In that case, an ADSR\footnote{Attack - Decay - Sustain -
+  FAUST-STK}. In that case, an ADSR\footnote{Attack - Decay - Sustain -
   Release.} envelope that is embedded in the {\it breathPressure} box
 controls the breath pressure.
 
-The other clarinet implemented in the {\it Faust-STK} is a bit
+The other clarinet implemented in the {\it FAUST-STK} is a bit
   more complex as it has a tone hole model that makes it possible
   to change the pitch of the note being played in a more natural
   way. Indeed, in the algorithm showed in figure \ref{fig:clarinet}
@@ -162,10 +211,10 @@ The reed table employed with the two clarinets to excite the model was
 also used to create a very simple saxophone model that is even more
 comparable to a violin whose strings are excited by a reed.   
 
-Two models of flute are implemented in the {\it Faust-STK}. The first one
+Two models of flute are implemented in the {\it FAUST-STK}. The first one
 is based on the algorithm used in the {\it Synthesis ToolKit} that is a
 simplified version of \cite{jet}. The other model is showed in figure
-\ref{fig:flute}. It uses a two loops
+\ref{fig:flute}. It uses two loops
 and a more sophisticated jet filter (a butterworth filter is used instead of
 a simple one pole).    
 
@@ -178,8 +227,8 @@ a simple one pole).
 \end{figure}
 
 A simple model of a brass instrument inspired from a class of the {\it Synthesis
-  ToolKit} and with a mouthpiece based on the model presented in
-\cite{brassMouth} is implemented in the {\it Faust-STK}. It can be used to
+  ToolKit} and with a mouthpiece based on the model described in
+\cite{brassMouth} is implemented in the {\it FAUST-STK}. It can be used to
 emulate a wide range of instrument such as a french horn, a
 trumpet or even a trombon. Its algorithm can be seen in figure \ref{fig:brass}.  
 
@@ -192,18 +241,18 @@ trumpet or even a trombon. Its algorithm can be seen in figure \ref{fig:brass}.
 \end{figure*}
 
 Finally, a tuned bottle where it is possible to blow through the neck
-to make sound is also implemented in the {\it Faust-STK}.
+to make sound is also implemented in the {\it FAUST-STK}.
 
 \subsection{String Instruments}\label{subsec:strings}
 
 Some of the waveguide algorithms for plucked strings have
 already been implemented in FAUST by J. O. Smith that worked in
 \cite{faustEks} on the extended Karplus-Strong. Although, it is
-possible to find in the {\it Faust-STK} a few models of string
+possible to find in the {\it FAUST-STK} a few models of string
 instruments such as a Sitar, a bowed string instrument, a nonlinear
 extended Karplus-Strong (Cf. \ref{sec:NLF} about nonlinear waveguide models), an acoustic bass, a piano and
 an harpsichord (Cf. \ref{sec:keyboards} about keyboards instruments in
-the {\it Faust-STK}). 
+the {\it FAUST-STK}). 
 
 Except the nonlinear extended Karplus-Strong,
 all this algorithms are inspired from the {\it Synthesis ToolKit} and
@@ -211,7 +260,7 @@ the program {\it SynthBuilder}.
 
 \subsection{Percussion Instruments}\label{subsec:drums}
 
-Four objects in the {\it Faust-STK} use the banded waveguide
+Four objects in the {\it FAUST-STK} use the banded waveguide
 synthesis technique (described in \cite{bdWaveGuides}) to model the following percussion instruments:
 \begin{itemize}
 \item an iron plaque;
@@ -224,15 +273,15 @@ Each of them can be excited with a bow or a hammer.
 
 \section{Using nonlinear passive allpass filter with waveguide models}\label{sec:NLF}
 
-Some of the instruments implemented in the {\it Faust-STK} are using
+Some of the instruments implemented in the {\it FAUST-STK} are using
 nonlinear passive allpass filters in order to generate nice natural and
 unnatural sound effects. 
 The allpass Ladder and Latice filters described in \cite{linearSpeech}
-makes it possible to create nonlinear behavior when they are used in
+makes it possible to create nonlinear behaviors when they are used in
 waveguide algorithms. The nonlinearities are generated by
 dynamicaly modulating the filter coefficients at every sample. For the
 instruments that use this kind of filter in the
-{\it Faust-STK}, the user can decide whether the coefficients are
+{\it FAUST-STK}, the user can decide whether the coefficients are
 modulated by the incoming signal or by a sine wave. In both cases, a
 ``nonlinearity factor'' parameter scale the range of the modulation of the
 filter coefficients. This parameter can be controlled by an envelope
@@ -262,13 +311,13 @@ the feedback of the waveguide loop as showed in figure \ref{fig:clarinetNL}.
 \end{figure}
 
 Finally, it is interesting to mention that we were able to implement a
-frequency modulation synthesizer in the {\it Faust-STK} by using this
+frequency modulation synthesizer in the {\it FAUST-STK} by using this
 kind of filter on a sine wave signal. 
 
 \section{Modal Models}\label{sec:modal}
 
 A set of instruments using modal synthesis can be found in the {\it
-  Faust-STK}. They are all implemented in the same code as they are based on the same algorithm.
+  FAUST-STK}. They are all implemented in the same code as they are based on the same algorithm.
 
 Modal synthesis was discovered by J-M. Adrien in the eighties \cite{modal} and
 is very similar to the technique used in \ref{subsec:drums} as it
@@ -523,13 +572,34 @@ tibetanBowl.dsp & 5,74 & 2,87 & 50 \\
 
 \section{Conclusions}
 
+Even if the primary goal of the {\it FAUST-STK} is the use of its
+physical models in a musical manner, it was also built to be a
+pedagogical tool. Indeed, because of its transparence and its
+efficiency, the FAUST programing language is particularly
+suitable for teaching digital audio signal processing. Therefore, a
+clean and well commented FAUST code is probably the best way to
+document the implemented instruments.
+
+With its continually growing users community, FAUST is becoming a high quality
+tool for the implementation of audio digital signal processing
+algorithms. The number of filters, effects and sound synthesizers
+available in FAUST is constantly increasing. The combined forces of
+JACK\footnote{JACK Audio Connection Kit: \url{http://jackaudio.org}.}
+and FAUST recently upgraded by the possibility to control the
+generated programs with the
+OSC\footnote{Open Source Control is a content format for messaging
+  among computers, sound synthesizers and other multimedia devices.}
+communication standard constitue a high efficiency work platform whose
+limits are only constrained by the user imagination.    
+
 \section{Acknowledgments}
-Many thanks to the great number of anonymous reviewers!
+This work was carried out in the frame of the ASTREE\footnote{Analyse
+  et Synthèse de Traitement en Temps Réel.} project supported
+by the Agence Nationale de Recherche (ANR-08-CORD-003).
 
 %\newpage
 \nocite{*}
 \bibliographystyle{IEEEbib}
 \bibliography{ref} % requires file template.bib
 
-\section{Appendix: Margin Check}
 \end{document}
