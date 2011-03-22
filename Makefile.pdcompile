@@ -14,10 +14,11 @@ FREEVERB 		:= freeverb.dsp.xml
 
 ###--------------------------------------------
 ### compilation flags for Linux
+### include dir must contain m_pd.h
 ###
 LINUXCFLAGS 	:= -DPD -O2 -funroll-loops -fomit-frame-pointer -fPIC \
     -Wall -W -Wshadow -Wno-unused -Wno-parentheses -Wno-switch $(CFLAGS)
-LINUXINCLUDE 	:=
+LINUXINCLUDE 	:= -I/usr/include/pdextended
 
 ###--------------------------------------------
 ### compilation flags for Darwin
