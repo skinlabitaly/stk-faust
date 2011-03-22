@@ -1,4 +1,10 @@
 FAUST SYNTHESIS TOOLKIT: A SET OF LINEAR AND NONLINEAR PHYSICAL MODELS FOR FAUST
+      			 
+CIEREC, EA 3068				Center for Computer Research in Music and Acoustics
+Université Jean Monnet		 and	(CCRMA) Stanford University
+F-42023, Saint-Etienne, France	 	Palo Alto, CA 94305, USA
+			      
+			 
 
 1/ What is it?
 --------------
@@ -111,6 +117,3 @@ About FAUST: https://lists.sourceforge.net/lists/listinfo/faudiostream-users
 
 
 Romain Michon
-CIEREC, EA 3068
-Université Jean Monnet
-F-42023, Saint-Etienne, France
