@@ -11,27 +11,43 @@ import("instrument.lib");
 
 //==================== GUI SPECIFICATION ================
 
-freq = nentry("h:Basic Parameters/freq", 440, 20, 20000, 1);
-gain = nentry("h:Basic Parameters/gain", 0.9, 0, 1, 0.01); 
-gate = button("h:Basic Parameters/gate");
+freq = nentry("h:Basic Parameters/freq [1][unit:Hz] [tooltip:Tone frequency]",440,20,20000,1);
+gain = nentry("h:Basic Parameters/gain [1][tooltip:Gain (value between 0 and 1)]",1,0,1,0.01); 
+gate = button("h:Basic Parameters/gate [1][tooltip:noteOn = 1, noteOff = 0]");
 
-bowPosition = hslider("h:Physical and Nonlinearity/v:Physical Parameters/Bow Position",0.7,0.01,1,0.01);
-bowPressure = hslider("h:Physical and Nonlinearity/v:Physical Parameters/Bow Pressure",0.75,0,1,0.01);
+bowPosition = hslider("h:Physical and Nonlinearity/v:Physical Parameters/Bow Position
+[2][tooltip:Bow position along the string (value between 0 and 1)]",0.7,0.01,1,0.01);
+bowPressure = hslider("h:Physical and Nonlinearity/v:Physical Parameters/Bow Pressure
+[2][tooltip:Bow pressure on the string (value between 0 and 1)]",0.75,0,1,0.01);
 
-typeModulation = nentry("h:Physical and Nonlinearity/v:Nonlinear Filter/Modulation Type",0,0,4,1);
-nonLinearity = hslider("h:Physical and Nonlinearity/v:Nonlinear Filter/Nonlinearity",0,0,1,0.01);
-frequencyMod = hslider("h:Physical and Nonlinearity/v:Nonlinear Filter/Modulation Frequency",220,20,1000,0.1);
-nonLinAttack = hslider("h:Physical and Nonlinearity/v:Nonlinear Filter/Nonlinearity Attack",0.1,0,2,0.01);
+typeModulation = nentry("h:Physical and Nonlinearity/v:Nonlinear Filter Parameters/Modulation Type 
+[3][tooltip: 0=theta is modulated by the incoming signal; 1=theta is modulated by the averaged incoming signal;
+2=theta is modulated by the squared incoming signal; 3=theta is modulated by a sine wave of frequency freqMod;
+4=theta is modulated by a sine wave of frequency freq;]",0,0,4,1);
+nonLinearity = hslider("h:Physical and Nonlinearity/v:Nonlinear Filter Parameters/Nonlinearity 
+[3][tooltip:Nonlinearity factor (value between 0 and 1)]",0,0,1,0.01);
+frequencyMod = hslider("h:Physical and Nonlinearity/v:Nonlinear Filter Parameters/Modulation Frequency 
+[3][unit:Hz][tooltip:Frequency of the sine wave for the modulation of theta (works if Modulation Type=3)]",220,20,1000,0.1);
+nonLinAttack = hslider("h:Physical and Nonlinearity/v:Nonlinear Filter Parameters/Nonlinearity Attack
+[3][unit:s][Attack duration of the nonlinearity]",0.1,0,2,0.01);
 
-vibratoGain = hslider("h:Envelopes and Vibrato/v:Vibrato Parameters/Vibrato Gain",0.01,0,1,0.01);
-vibratoFreq = hslider("h:Envelopes and Vibrato/v:Vibrato Parameters/Vibrato Freq",6,1,15,0.1);
-vibratoBegin = hslider("h:Envelopes and Vibrato/v:Vibrato Parameters/Vibrato Begin",0.05,0,2,0.01);
-vibratoAttack = hslider("h:Envelopes and Vibrato/v:Vibrato Parameters/Vibrato Attack",0.5,0,2,0.01);
-vibratoRelease = hslider("h:Envelopes and Vibrato/v:Vibrato Parameters/Vibrato Release",0.1,0,2,0.01);
+vibratoFreq = hslider("h:Envelopes and Vibrato/v:Vibrato Parameters/Vibrato Freq 
+[4][unit:Hz]",6,1,15,0.1);
+vibratoGain = hslider("h:Envelopes and Vibrato/v:Vibrato Parameters/Vibrato Gain
+[4][tooltip:A value between 0 and 1]",0.01,0,1,0.01);
+vibratoBegin = hslider("h:Envelopes and Vibrato/v:Vibrato Parameters/Vibrato Begin
+[4][unit:s][tooltip:Vibrato silence duration before attack]",0.05,0,2,0.01);
+vibratoAttack = hslider("h:Envelopes and Vibrato/v:Vibrato Parameters/Vibrato Attack 
+[4][unit:s][tooltip:Vibrato attack duration]",0.5,0,2,0.01);
+vibratoRelease = hslider("h:Envelopes and Vibrato/v:Vibrato Parameters/Vibrato Release 
+[4][unit:s][tooltip:Vibrato release duration]",0.01,0,2,0.01);
 
-envelopeAttack = hslider("h:Envelopes and Vibrato/v:Envelope Parameters/Envelope Attack",0.01,0,2,0.01);
-envelopeDecay = hslider("h:Envelopes and Vibrato/v:Envelope Parameters/Envelope Decay",0.05,0,2,0.01);
-envelopeRelease = hslider("h:Envelopes and Vibrato/v:Envelope Parameters/Envelope Release",0.1,0,2,0.01);
+envelopeAttack = hslider("h:Envelopes and Vibrato/v:Envelope Parameters/Envelope Attack 
+[5][unit:s][tooltip:Envelope attack duration]",0.01,0,2,0.01);
+envelopeDecay = hslider("h:Envelopes and Vibrato/v:Envelope Parameters/Envelope Decay 
+[5][unit:s][tooltip:Envelope decay duration]",0.05,0,2,0.01);
+envelopeRelease = hslider("h:Envelopes and Vibrato/v:Envelope Parameters/Envelope Release 
+[5][unit:s][tooltip:Envelope release duration]",0.1,0,2,0.01);
 
 //==================== SIGNAL PROCESSING ================
 
@@ -94,4 +110,4 @@ instrumentBody(feedBckBridge) = (*(-1) <: +(feedBckBridge),_ : (bowVelocity-_ <:
 	_, + : +(feedBckBridge),_) ~ (neckDelay) : !,_;
 
 process = (stringFilter : instrumentBody) ~ (bridgeDelay : NLFM) : bodyFilter(*(0.2)) : 
-	_*gain*8 : stereo;
+	_*gain*8 : stereo : hgroup("Reverb[6]",component("freeverb.dsp"));

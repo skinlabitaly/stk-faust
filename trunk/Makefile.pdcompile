@@ -60,11 +60,7 @@ $(DEST)%.cpp: %.dsp
 	
 $(DEST)%.pd: %.dsp
 	faust -xml $< -o /dev/null
-	#ifeq ($<.xml,$(FREEVERB))
-	#	$(FAUST2PD) -s freeverb.dsp.xml
-	#else
-		$(FAUST2PD) $(F2PDFLAGS) $<.xml
-	#endif
+	$(FAUST2PD) $(F2PDFLAGS) $<.xml
 	mv $(<:.dsp=.pd) $(DEST)
 	rm -f $<.xml
 

@@ -6,11 +6,19 @@ SC_SOURCE_DIR = ../../supercollider
 
 all :
 	install -d puredatadir
-	$(MAKE) DEST='puredatadir/' ARCH='puredata.cpp' INC='-I/opt/local/include' LIB='-L/opt/local/lib' F2PDFLAGS='-s' -f Makefile.pdcompile
+	$(MAKE) DEST='puredatadir/' ARCH='puredata.cpp' INC='-I/opt/local/include' LIB='-L/opt/local/lib' F2PDFLAGS='-n 2 -s' -f Makefile.pdcompile
+
+pdpoly2 :
+	install -d puredatadir
+	$(MAKE) DEST='puredatadir/' ARCH='puredata.cpp' INC='-I/opt/local/include' LIB='-L/opt/local/lib' F2PDFLAGS='-n 2 -s' -f Makefile.pdcompile
 
 pdpoly4 :
 	install -d puredatadir
 	$(MAKE) DEST='puredatadir/' ARCH='puredata.cpp' INC='-I/opt/local/include' LIB='-L/opt/local/lib' F2PDFLAGS='-n 4 -s' -f Makefile.pdcompile
+
+pdpoly6 :
+	install -d puredatadir
+	$(MAKE) DEST='puredatadir/' ARCH='puredata.cpp' INC='-I/opt/local/include' LIB='-L/opt/local/lib' F2PDFLAGS='-n 6 -s' -f Makefile.pdcompile
 
 pdpoly8 :
 	install -d puredatadir
@@ -243,7 +251,9 @@ help:
 	@echo "make w32vst        : crosscompile instruments as windows VST plugins"
 	@echo "make iphone        : compile instruments for Apple iPhone/iPod"
 	@echo "make supercollider : compile instruments as Supercollider plugins"
-	@echo "make pdpoly4       : compile instruments as Puredata externals with faust2pd pacthes with 4 voices polyphony"
+	@echo "make pdpoly2       : compile instruments as Puredata externals with faust2pd patches with 2 voices polyphony"
+	@echo "make pdpoly4       : compile instruments as Puredata externals with faust2pd patches with 4 voices polyphony"
+	@echo "make pdpoly6       : compile instruments as Puredata externals with faust2pd patches with 6 voices polyphony"
 	@echo "make pdpoly8	  : compile instruments as Puredata externals with faust2pd patches with 8 voices polyphony"
 	@echo "make q             : compile instruments as Q plugins"
 	@echo "--------------------------------------------"
