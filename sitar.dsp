@@ -10,11 +10,12 @@ import("instrument.lib");
 
 //==================== GUI SPECIFICATION ================
 
-freq = nentry("h:Basic Parameters/freq", 440, 100, 2000, 1);
-gain = nentry("h:Basic Parameters/gain", 1, 0, 1, 0.01); 
-gate = button("h:Basic Parameters/gate");
+freq = nentry("h:Basic Parameters/freq [1][unit:Hz] [tooltip:Tone frequency]",440,20,20000,1);
+gain = nentry("h:Basic Parameters/gain [1][tooltip:Gain (value between 0 and 1)]",1,0,1,0.01); 
+gate = button("h:Basic Parameters/gate [1][tooltip:noteOn = 1, noteOff = 0]");
 
-resonance = hslider("v:Physical Parameters/Resonance",0.7,0,1,0.01)*0.1;
+resonance = hslider("v:Physical Parameters/Resonance
+[2][tooltip:A value between 0 and 1]",0.7,0,1,0.01)*0.1;
 
 //==================== SIGNAL PROCESSING ================
 
@@ -42,4 +43,5 @@ filter = oneZero1(b0,b1)
 		b1 = -zero*b0;
 	};
 
-process = (*(loopGain) : filter + (envelope*noise*amGain))~delayLine : *(8): stereo;
+process = (*(loopGain) : filter + (envelope*noise*amGain))~delayLine : *(8) : 
+stereo : hgroup("Reverb[3]",component("freeverb.dsp"));

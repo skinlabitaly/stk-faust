@@ -10,15 +10,20 @@ import("instrument.lib");
 
 //==================== GUI SPECIFICATION ================
 
-freq = nentry("h:Basic Parameters/freq", 440, 20, 20000, 1);
-gain = nentry("h:Basic Parameters/gain", 0.8, 0, 1, 0.01); 
-gate = button("h:Basic Parameters/gate") > 0;
+freq = nentry("h:Basic Parameters/freq [1][unit:Hz] [tooltip:Tone frequency]",440,20,20000,1);
+gain = nentry("h:Basic Parameters/gain [1][tooltip:Gain (value between 0 and 1)]",0.8,0,1,0.01); 
+gate = button("h:Basic Parameters/gate [1][tooltip:noteOn = 1, noteOff = 0]");
 
-select = nentry("v:Physical Parameters/Excitation Selector",0,0,1,1);
-integrationConstant = hslider("v:Physical Parameters/Integration Constant",0,0,1,0.01);
-baseGain = hslider("v:Physical Parameters/Base Gain",1,0,1,0.01);
-bowPressure = hslider("v:Physical Parameters/Bow Pressure",0.2,0,1,0.01);
-bowPosition = hslider("v:Physical Parameters/Bow Position",0,0,1,0.01);
+select = nentry("h:Physical and Nonlinearity/v:Physical Parameters/Excitation Selector
+[2][tooltip:0=Bow; 1=Strike]",0,0,1,1);
+integrationConstant = hslider("h:Physical and Nonlinearity/v:Physical Parameters/Integration Constant
+[2][tooltip:A value between 0 and 1]",0,0,1,0.01);
+baseGain = hslider("h:Physical and Nonlinearity/v:Physical Parameters/Base Gain
+[2][tooltip:A value between 0 and 1]",1,0,1,0.01);
+bowPressure = hslider("h:Physical and Nonlinearity/v:Physical Parameters/Bow Pressure
+[2][tooltip:Bow pressure on the instrument (Value between 0 and 1)]",0.2,0,1,0.01);
+bowPosition = hslider("h:Physical and Nonlinearity/v:Physical Parameters/Bow Position
+[2][tooltip:Bow position on the instrument (Value between 0 and 1)]",0,0,1,0.01);
 
 //==================== MODAL PARAMETERS ================
 
@@ -92,4 +97,4 @@ process =
 		//nModes resonances with nModes feedbacks for bow table look-up 
 		par(i,nModes,(resonance(i)~_)))~par(i,nModes,_) :> + : 
 		//Signal Scaling and stereo
-		*(4) : stereo;
+		*(4) : stereo : hgroup("Reverb[6]",component("freeverb.dsp"));

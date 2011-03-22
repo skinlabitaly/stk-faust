@@ -10,13 +10,18 @@ import("instrument.lib");
 
 //==================== GUI SPECIFICATION ================
 
-freq = nentry("h:Basic Parameters/freq", 440, 20, 20000, 1);
-gain = nentry("h:Basic Parameters/gain", 1, 0, 1, 0.01); 
-gate = button("h:Basic Parameters/gate") > 0;
+freq = nentry("h:Basic Parameters/freq [1][unit:Hz] [tooltip:Tone frequency]",440,20,20000,1);
+gain = nentry("h:Basic Parameters/gain [1][tooltip:Gain (value between 0 and 1)]",0.8,0,1,0.01); 
+gate = button("h:Basic Parameters/gate [1][tooltip:noteOn = 1, noteOff = 0]");
 
-typeModulation = nentry("v:Nonlinear Filter/Modulation Type",0,0,4,1);
-nonLinearity = hslider("Nonlinearity",0,0,1,0.01);
-frequencyMod = hslider("Modulation Frequency",220,20,1000,0.1);
+typeModulation = nentry("h:Physical and Nonlinearity/v:Nonlinear Filter Parameters/Modulation Type 
+[2][tooltip: 0=theta is modulated by the incoming signal; 1=theta is modulated by the averaged incoming signal;
+2=theta is modulated by the squared incoming signal; 3=theta is modulated by a sine wave of frequency freqMod;
+4=theta is modulated by a sine wave of frequency freq;]",0,0,4,1);
+nonLinearity = hslider("h:Physical and Nonlinearity/v:Nonlinear Filter Parameters/Nonlinearity 
+[2][tooltip:Nonlinearity factor (value between 0 and 1)]",0,0,1,0.01);
+frequencyMod = hslider("h:Physical and Nonlinearity/v:Nonlinear Filter Parameters/Modulation Frequency 
+[2][unit:Hz][tooltip:Frequency of the sine wave for the modulation of theta (works if Modulation Type=3)]",220,20,1000,0.1);
 
 //==================== PROCESSING ================
 
@@ -80,4 +85,4 @@ stringLoopGainT = gate*0.9996 + (gate<1)*releaseLoopGain(freqn)*0.9 : smooth(0.9
 //one string
 string = (*(stringLoopGainT)+_ : delay(4096,delayLength) : loopFilter)~NLFM;
 
-process = soundBoard : string : stereo;
+process = soundBoard : string : stereo : hgroup("Reverb[3]",component("freeverb.dsp"));

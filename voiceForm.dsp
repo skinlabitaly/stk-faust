@@ -10,24 +10,35 @@ import("instrument.lib");
 
 //==================== GUI SPECIFICATION ================
 
-freq = nentry("h:Basic Parameters/freq", 440, 20, 20000, 1);
-gain = nentry("h:Basic Parameters/gain", 1, 0, 1, 0.01); 
-gate = button("h:Basic Parameters/gate");
+freq = nentry("h:Basic Parameters/freq [1][unit:Hz] [tooltip:Tone frequency]",440,20,20000,1);
+gain = nentry("h:Basic Parameters/gain [1][tooltip:Gain (value between 0 and 1)]",1,0,1,0.01); 
+gate = button("h:Basic Parameters/gate [1][tooltip:noteOn = 1, noteOff = 0]");
 
-phoneme = hslider("v:Physical Parameters/Phoneme",4,0,20,1);
-interpFactor = hslider("v:Physical Parameters/Interp Factor",0.999,0,0.999,0.001);
+phoneme = hslider("v:Physical Parameters/Phoneme
+[2][tooltip:0->eee, 1->ihh, 2->ehh, 3->aaa, 4->ahh, 5->aww, 6->ohh, 7->uhh, 8->uuu, 9->ooo, 10->rrr, 11->lll, 12->mmm, 13->nnn, 14->nng, 15->ngg, 16->fff, 17->sss, 18->thh, 19->shh, 20->xxx, 21->hee, 22->hoo, 23->hah, 24->bbb, 25->ddd, 26->jjj, 27->ggg, 28->vvv, 29->zzz, 30->thz, 31->zhh]",4,0,31,1);
+interpFactor = hslider("v:Physical Parameters/Interp Factor
+[2][tooltip:Interpolation between the formants (value between 0 and 1)]",0.999,0,0.999,0.001);
 
-vibratoFreq = hslider("h:Envelopes and Vibrato/v:Vibrato Parameters/Vibrato Freq",6,1,15,0.1);
-vibratoGain = hslider("h:Envelopes and Vibrato/v:Vibrato Parameters/Vibrato Gain",0.05,0,1,0.01);
-vibratoBegin = hslider("h:Envelopes and Vibrato/v:Vibrato Parameters/Vibrato Begin",0.05,0,2,0.01);
-vibratoAttack = hslider("h:Envelopes and Vibrato/v:Vibrato Parameters/Vibrato Attack",0.5,0,2,0.01);
-vibratoRelease = hslider("h:Envelopes and Vibrato/v:Vibrato Parameters/Vibrato Release",0.1,0,2,0.01);
+vibratoFreq = hslider("h:Envelopes and Vibrato/v:Vibrato Parameters/Vibrato Freq 
+[3][unit:Hz]",6,1,15,0.1);
+vibratoGain = hslider("h:Envelopes and Vibrato/v:Vibrato Parameters/Vibrato Gain
+[3][tooltip:A value between 0 and 1]",0.05,0,1,0.01);
+vibratoBegin = hslider("h:Envelopes and Vibrato/v:Vibrato Parameters/Vibrato Begin
+[3][unit:s][tooltip:Vibrato silence duration before attack]",0.05,0,2,0.01);
+vibratoAttack = hslider("h:Envelopes and Vibrato/v:Vibrato Parameters/Vibrato Attack 
+[3][unit:s][tooltip:Vibrato attack duration]",0.5,0,2,0.01);
+vibratoRelease = hslider("h:Envelopes and Vibrato/v:Vibrato Parameters/Vibrato Release 
+[3][unit:s][tooltip:Vibrato release duration]",0.1,0,2,0.01);
 
-voicedEnvelopeAttack = hslider("h:Envelopes and Vibrato/v:Envelope Parameters/Voiced Attack",0.01,0,2,0.01);
-voicedEnvelopeRelease = hslider("h:Envelopes and Vibrato/v:Envelope Parameters/Voiced Release",0.01,0,2,0.01);
+voicedEnvelopeAttack = hslider("h:Envelopes and Vibrato/v:Envelope Parameters/Voiced Attack
+[4][unit:s][tooltip:Voiced sounds attack duration]",0.01,0,2,0.01);
+voicedEnvelopeRelease = hslider("h:Envelopes and Vibrato/v:Envelope Parameters/Voiced Release
+[4][unit:s][tooltip:Voiced sounds release duration]",0.01,0,2,0.01);
 
-noiseEnvelopeAttack = hslider("h:Envelopes and Vibrato/v:Envelope Parameters/Noised Attack",0.001,0,2,0.001);
-noiseEnvelopeRelease = hslider("h:Envelopes and Vibrato/v:Envelope Parameters/Noised Release",0.001,0,2,0.001);
+noiseEnvelopeAttack = hslider("h:Envelopes and Vibrato/v:Envelope Parameters/Noised Attack
+[4][unit:s][tooltip:Noised sounds attack duration]",0.001,0,2,0.001);
+noiseEnvelopeRelease = hslider("h:Envelopes and Vibrato/v:Envelope Parameters/Noised Release
+[4][unit:s][tooltip:Noised sounds release duration]",0.001,0,2,0.001);
 
 //==================== SIGNAL PROCESSING ================
 
@@ -115,4 +126,4 @@ voiced = rdtable(impuls20TableSize, impuls20, int(phaser)) : _*voiceGain*voicedE
 frica = noise*noiseEnvelope*noiseGain;
 
 process = voiced : oneZeroFilter : onePoleFilter : 
-		 +(frica) <: filter0,filter1,filter2,filter3 :> + : stereo;
+		 +(frica) <: filter0,filter1,filter2,filter3 :> + : stereo : hgroup("Reverb[6]",component("freeverb.dsp"));
