@@ -1,5 +1,17 @@
-MYICCFLAGS := '-O3 -xT -ftz -fno-alias -fp-model fast=2' 
-MYGCCFLAGS := '-O3 -march=native -mfpmath=sse -msse -msse2 -msse3 -ffast-math'
+ifeq ($(OSC),1)
+ OSCCTRL := "-DOSCCTRL -I/usr/local/lib/faust/osclib"
+ QTDEFS  := "DEFINES += OSCCTRL"
+ OSCLIB  := -L/usr/local/lib/faust/osclib -lOSCFaust -loscpack
+ HEADERQT := /usr/local/lib/faust/gui/faustqt.h
+ PATHOSC := /usr/local/lib/faust/osclib
+else
+ HEADERQT := /usr/local/lib/faust/faustqt.h
+endif
+
+MYICCFLAGS := '-O3 -xT -ftz -fno-alias -fp-model fast=2 $(OSCCTRL)' 
+#MYICCFLAGS := '-O3 -xT -ftz -fno-alias -fp-model fast=2' 
+#MYGCCFLAGS := '-O3 -march=native -mfpmath=sse -msse -msse2 -msse3 -ffast-math'
+MYGCCFLAGS := '-O2 -march=native -ffast-math $(OSCCTRL)'
 VSIZE := 256
 
 SC_SOURCE_DIR = ../../supercollider
@@ -30,7 +42,7 @@ plot :
 
 jackqt :
 	install -d jackqtdir
-	$(MAKE) DEST='jackqtdir/' ARCH='jack-qt.cpp' LIB='-ljack' -f Makefile.qtcompile
+	$(MAKE) DEST='jackqtdir/' ARCH='jack-qt.cpp' LIB='-ljack $(OSCLIB)' HEADER=$(HEADERQT) DEFS=$(QTDEFS) -f Makefile.qtcompile
 
 svg:
 	$(MAKE) -f Makefile.svgcompile
@@ -223,25 +235,25 @@ supercollider :
 
 jackconsole :
 	install -d jackconsoledir
-	$(MAKE) DEST='jackconsoledir/' ARCH='jack-console.cpp' VEC='-vec -vs $(VSIZE)' LIB='`pkg-config --cflags --libs jack `' -f Makefile.compile
+	$(MAKE) DEST='jackconsoledir/' ARCH='jack-console.cpp' VEC='-vec -vs $(VSIZE)' LIB='`pkg-config --cflags -ljack `' -f Makefile.compile
 
 mathdoc :
 	$(MAKE) -f Makefile.mathdoc
 
 help:
-	@echo "make alsagtk       : compile instruments as ALSA applications with a GTK Graphical User Interface"
-	@echo "make alsaqt        : compile instruments as ALSA applications with a QT4 Graphical User Interface"
-	@echo "make sndfile       : compile instruments as sound file processors with a Command line User Interface"
-	@echo "make jackconsole   : compile instruments as JACK applications with a Command line User Interface"
-	@echo "make jackgtk       : compile instruments as JACK applications with a GTK Graphical User Interface"
-	@echo "make jackqt        : compile instruments as JACK applications with a QT4 Graphical User Interface"
-	@echo "make jackwx        : compile instruments as JACK applications with a wxWindows Graphical User Interface"
-	@echo "make ossgtk        : compile instruments as OSS applications with a GTK Graphical User Interface"
-	@echo "make osswx         : compile instruments as OSS applications with a wxWindows Graphical User Interface"
-	@echo "make pagtk         : compile instruments as PortAudio applications with a GTK Graphical User Interface"
-	@echo "make paqt          : compile instruments as PortAudio applications with a QT4 Graphical User Interface"
-	@echo "make pawx          : compile instruments as PortAudio applications with a wxWindows Graphical User Interface"
-	@echo "make caqt          : compile instruments as CoreAudio applications with a QT4 Graphical User Interface"
+	@echo "make alsagtk       	: compile instruments as ALSA applications with a GTK Graphical User Interface"
+	@echo "make alsaqt        	: compile instruments as ALSA applications with a QT4 Graphical User Interface"
+	@echo "make sndfile       	: compile instruments as sound file processors with a Command line User Interface"
+	@echo "make jackconsole   	: compile instruments as JACK applications with a Command line User Interface"
+	@echo "make jackgtk   		: compile instruments as JACK applications with a GTK Graphical User Interface"
+	@echo "make jackqt [OSC=1]     : compile instruments as JACK applications with a QT4 Graphical User Interface"
+	@echo "make jackwx        	: compile instruments as JACK applications with a wxWindows Graphical User Interface"
+	@echo "make ossgtk        	: compile instruments as OSS applications with a GTK Graphical User Interface"
+	@echo "make osswx         	: compile instruments as OSS applications with a wxWindows Graphical User Interface"
+	@echo "make pagtk         	: compile instruments as PortAudio applications with a GTK Graphical User Interface"
+	@echo "make paqt          	: compile instruments as PortAudio applications with a QT4 Graphical User Interface"
+	@echo "make pawx          	: compile instruments as PortAudio applications with a wxWindows Graphical User Interface"
+	@echo "make caqt          	: compile instruments as CoreAudio applications with a QT4 Graphical User Interface"
 	@echo "--------------------------------------------"
 	@echo "make ladspa        : compile instruments as LADSPA plugins"
 	@echo "make csound        : compile instruments as CSOUND opcodes"
