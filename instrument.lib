@@ -256,15 +256,6 @@ nonLinearModulator(nonlinearity,env,freq,typeMod,freqMod,order) =
 readMarmstk1 = ffunction(float readMarmstk1 (int), <instrument.h>,"");
 marmstk1TableSize = 246;
 
-//----------------------- VOICE IMPULSE ----------------------------
-// Voice impulse table.
-//
-// USAGE:
-//   index : readIpuls20 : _
-
-readImpuls20 = ffunction(float readImpuls20(int), <instrument.h>,"");
-impuls20TableSize = 256;
-
 //========================= TOOLS ===============================
 
 //----------------------- STEREOIZER ----------------------------
