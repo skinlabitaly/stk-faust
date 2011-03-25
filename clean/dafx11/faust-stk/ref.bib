@@ -127,3 +127,43 @@ Violin Bowing},
 	Title = {Aeroacoustics of Confined Jets with Applications to the Physical
   Modeling of Recorder-Like Instruments},
 	Year = {1995}}
+
+@string{Smith3 =  "{Smith III}"}
+@string(PASPURL = "\url{https://ccrma.stanford.edu/~jos/pasp/}")
+@BOOK{PASP,
+	AUTHOR = "Julius O. " # Smith3,
+	TITLE = "Physical Audio Signal Processing",
+	PUBLISHER = PASPURL,
+        MONTH = dec,
+	YEAR = 2010,
+	NOTE = "online~book"
+}
+
+@ARTICLE{KL,
+	AUTHOR = "J. L. Kelly and C. C. Lochbaum",
+	TITLE = "Speech Synthesis",
+	JOURNAL = "Proc.{} Fourth Int.{} Congress on Acoustics, Copenhagen", 
+	PAGES = {1--4},
+	MONTH = "September",
+	YEAR = 1962,
+	NOTE = "Paper G42"
+}
+                  
+@INPROCEEDINGS{NLF,
+	AUTHOR = "Julius Smith and Romain Michon",
+        TITLE = "Nonlinear Allpass Ladder Filters in Faust",
+        BOOKTITLE = "in review",
+	YEAR = 2011
+}
+
+@string(icmc92 =  "Proc.{} 1992 Int.{} Comp\-ut\-er Music Conf., San Jose")
+@string(wgoURL = "\url{http://ccrma.stanford.edu/~jos/wgo/}")
+@INPROCEEDINGS{PRCJOS,
+	AUTHOR = "Julius O. " # Smith3 # " and Perry R. Cook",
+	TITLE = "The Second-Order Digital Wave\-guide Oscillator",
+	BOOKTITLE = icmc92,
+	PUBLISHER = "Computer Music Association",
+	PAGES = {150--153},
+	YEAR = 1992,
+	NOTE = "" # wgoURL
+}
