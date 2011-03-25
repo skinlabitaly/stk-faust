@@ -207,7 +207,7 @@ jetTable(x) = x <: _*(_*_-1) : saturationPos : saturationNeg;
 // USAGE:
 //   _ : nonLinearModulator(nonlinearity,env,freq,typeMod,freqMod,order) : _
 // where
-//   nonLinearity = nonlinearity coefficient between 0 and 1 
+//   nonlinearity = nonlinearity coefficient between 0 and 1 
 //   env = input to connect any kind of envelope
 //   freq = current tone frequency
 //   typeMod = if 0: theta is modulated by the incoming signal;
