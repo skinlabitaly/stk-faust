@@ -235,7 +235,7 @@ supercollider :
 
 jackconsole :
 	install -d jackconsoledir
-	$(MAKE) DEST='jackconsoledir/' ARCH='jack-console.cpp' VEC='-vec -vs $(VSIZE)' LIB='`pkg-config --cflags -ljack `' -f Makefile.compile
+	$(MAKE) DEST='jackconsoledir/' ARCH='jack-console.cpp' VEC='-vec -vs $(VSIZE)' LIB='`pkg-config --cflags --libs jack`' -f Makefile.compile
 
 mathdoc :
 	$(MAKE) -f Makefile.mathdoc
