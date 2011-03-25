@@ -6,7 +6,7 @@ all: $(NAME).tex $(NAME).bib
 	pdflatex $(NAME)
 	pdflatex $(NAME)
 
-pdf p: $(NAME).pdf
+pdf p: all
 
 pdfo po: $(NAME).pdf
 	open $(NAME).pdf
