@@ -1,15 +1,11 @@
-% Template LaTeX file for DAFx-11 papers
+% Based on template LaTeX file for DAFx-11 papers
 
-%------------------------------------------------------------------------------------------
-%  !  !  !  !  !  !  !  !  !  !  !  ! user defined variables  !  !  !  !  !  !  !  !  !  !  !  !  !  !
-% Please use these commands to define title and author of the paper:
 \def\papertitle{FAUST-STK: a set of linear and nonlinear physical
-  models for the FAUST programing language}
+  models for the FAUST programming language}
 \def\paperauthorA{Romain Michon}
 \def\paperauthorB{Julius O. Smith}
 
-
-%------------------------------------------------------------------------------------------
+%------------------------------------------------------------------------------
 \documentclass[twoside,a4paper]{article}
 \usepackage{dafx_11}
 \usepackage{amsmath,amssymb,amsfonts,amsthm}
@@ -90,21 +86,21 @@
 
 \begin{abstract}
 
-The {\it FAUST Synthesis ToolKit} is a set of virtual musical
+The {\it FAUST Synthesis Tool Kit} is a set of virtual musical
 instruments written in the FAUST programming language and
 based on waveguide algorithms and on modal synthesis. Most of them
 were inspired by instruments implemented in the {\it Synthesis
-  ToolKit} and the program {\it SynthBuilder}.
+  Tool Kit} and the program {\it SynthBuilder}.
 
-Our attention has partly been focused on the pedagogical aspect of the implemented
-objects. Indeed, we tried to make the FAUST code of each objects as optimized and
-as expressive as possible.
+Our attention has partly been focused on the pedagogical aspect of the
+implemented objects. Indeed, we tried to make the FAUST code of each
+object as optimized and as expressive as possible.
 
 Some of the instruments in the {\it FAUST-STK} use nonlinear allpass
 filters to create interesting and new behaviors. Also, a few
-of them were modified in order to use following gesture datas to
+of them were modified in order to use gesture data to
 control the performance. A demonstration of this kind of use is done
-in the {\it PureData} program.
+in the {\it Pure Data} program.
 
 Finally, the results of some performances tests of the generated C++
 code are presented.   
@@ -113,14 +109,14 @@ code are presented.
 
 \section{Introduction}\label{sec:intro}
 
-The {\it FAUST Synthesis ToolKit} is set of virtual musical instruments
+The {\it FAUST Synthesis Tool Kit} is set of virtual musical instruments
 programmed in the FAUST\footnote{Functional AUdio STream is programming language that
   proposes an abstract, purely functional approach to signal
   processing. It has been developed at Lyon's GRAME (Groupe de
   recherche en Acoustique et en Musique Electronique) since 2002:
-  \url{http://faust.grame.fr/}.} programing language. Most of them are
+  \url{http://faust.grame.fr/}.} programming language. Most of them are
 based on physical models inspired from the algorithms implemented in the {\it Synthesis
-  ToolKit (STK)} \cite{STK} and the program {\it SynthBuilder}
+  Tool Kit (STK)} \cite{STK} and the program {\it SynthBuilder}
 \cite{synthBuilder}.
 
 The {\it STK} is developed since 1996 by P. R. Cook and
@@ -165,7 +161,7 @@ A brief overview of the {\it FAUST-STK} waveguide instruments is done in this se
 \subsection{Wind Instruments}
 
 The algorithms used in the {\it FAUST-STK} are almost all based on
-instruments implemented in the {\it Synthesis ToolKit} and the program
+instruments implemented in the {\it Synthesis Tool Kit} and the program
 {\it SynthBuilder}. Although, it is important to observe that some of
 them were slightly modified in order to adapt them to the FAUST semantic.
 
@@ -212,10 +208,10 @@ also used to create a very simple saxophone model that is even more
 comparable to a violin whose strings are excited by a reed.   
 
 Two models of flute are implemented in the {\it FAUST-STK}. The first one
-is based on the algorithm used in the {\it Synthesis ToolKit} that is a
+is based on the algorithm used in the {\it Synthesis Tool Kit} that is a
 simplified version of \cite{jet}. The other model is showed in figure
 \ref{fig:flute}. It uses two loops
-and a more sophisticated jet filter (a butterworth filter is used instead of
+and a more sophisticated jet filter (a Butterworth filter is used instead of
 a simple one pole).    
 
 \begin{figure}[ht]
@@ -227,10 +223,10 @@ a simple one pole).
 \end{figure}
 
 A simple model of a brass instrument inspired from a class of the {\it Synthesis
-  ToolKit} and with a mouthpiece based on the model described in
+  Tool Kit} and with a mouthpiece based on the model described in
 \cite{brassMouth} is implemented in the {\it FAUST-STK}. It can be used to
 emulate a wide range of instrument such as a french horn, a
-trumpet or even a trombon. Its algorithm can be seen in figure \ref{fig:brass}.  
+trumpet or even a trombone. Its algorithm can be seen in figure \ref{fig:brass}.  
 
 \begin{figure*}[ht]
 \begin{center}
@@ -255,7 +251,7 @@ an harpsichord (Cf. \ref{sec:keyboards} about keyboards instruments in
 the {\it FAUST-STK}). 
 
 Except the nonlinear extended Karplus-Strong,
-all this algorithms are inspired from the {\it Synthesis ToolKit} and
+all this algorithms are inspired from the {\it Synthesis Tool Kit} and
 the program {\it SynthBuilder}.   
 
 \subsection{Percussion Instruments}\label{subsec:drums}
@@ -276,10 +272,10 @@ Each of them can be excited with a bow or a hammer.
 Some of the instruments implemented in the {\it FAUST-STK} are using
 nonlinear passive allpass filters in order to generate nice natural and
 unnatural sound effects. 
-The allpass Ladder and Latice filters described in \cite{linearSpeech}
+The allpass Ladder and Lattice filters described in \cite{linearSpeech}
 makes it possible to create nonlinear behaviors when they are used in
 waveguide algorithms. The nonlinearities are generated by
-dynamicaly modulating the filter coefficients at every sample. For the
+dynamically modulating the filter coefficients at every sample. For the
 instruments that use this kind of filter in the
 {\it FAUST-STK}, the user can decide whether the coefficients are
 modulated by the incoming signal or by a sine wave. In both cases, a
@@ -324,7 +320,7 @@ is very similar to the technique used in \ref{subsec:drums} as it
 consists in exciting a filter bank with an impulsion (figure
 \ref{fig:modal}).
 
-Implementing modal synthesis with FAUST was a bit chalenging. Indeed,
+Implementing modal synthesis with FAUST was a bit challenging. Indeed,
 it requires to handle an important amount of values and to use an
 excitation signal stored in a wave file. The first problem was solved
 by using the foreign function primitive in FAUST that allows to use
@@ -341,7 +337,7 @@ compatible with all the FAUST architectures. Based on this observation
 and the fact that the wave tables used in the STK had a maximal size
 of 1024 samples, we decided to use
 the same technique than the one previously explained. Indeed, the raw
-datas were extracted from the wave file to be put in an array of floats that
+data were extracted from the wave file to be put in an array of floats that
 can be used in a C++ function to return the values with an index. This
 C++ function can then be called in FAUST using the foreign function
 mechanism to fill a buffer with the \texttt{rdtable} primitive.   
@@ -357,30 +353,30 @@ mechanism to fill a buffer with the \texttt{rdtable} primitive.
 \section{Voice Synthesis}
 
 A very simple voice synthesizer based on the algorithm from
-the {\it Synthesis ToolKit} is implemented in the {\it FAUST-STK}. It
+the {\it Synthesis Tool Kit} is implemented in the {\it FAUST-STK}. It
 uses a wave table to excite a bank of 4 bandpass filters that shape
 the voice formants. The formant values are stored in a C++ function in the
 same way than described in \ref{sec:modal} as a set of center
 frequencies, amplitudes and bandwidths. This function is then called
 in the FAUST code using the foreign function primitive. The thirty-two
 phonemes stored in this function are the same than the one from the
-{\it Synthesis ToolKit}. 
+{\it Synthesis Tool Kit}. 
 
 \section{Keyboards}\label{sec:keyboards}
 
 A {\it SynthBuilder} patch implementing a commuted piano \cite{commutedPiano} has been
 written in the late nineties at Stanford's CCRMA. This patch was partly
 ported in 2006 by Stephen Sinclair at McGill University in the {\it
-  Synthesis ToolKit} \cite{pianoSTK}. A big part of his work consisted
+  Synthesis Tool Kit} \cite{pianoSTK}. A big part of his work consisted
 in extracting the values for each parameters from the {\it
   SynthBuilder} patch to store them in a set of C++ functions. We
 reused them to build our FAUST commuted piano version by using the
 {\it foreign function} mechanism as described in \ref{sec:modal}.
 
-In this piano model, the keyboard is splited in two part which use a
+In this piano model, the keyboard is split in two part which use a
 different algorithm. Indeed, the tones
 below {\it E6} use the commuted waveguide technique while tones above
-or equal to {\it E6} use a serie of biquad filters to generate the
+or equal to {\it E6} use a series of biquad filters to generate the
 sound (figure \ref{fig:piano}).   
 
 \begin{figure}[ht]
@@ -401,15 +397,15 @@ similar algorithm to the one described above.
 
 The current FAUST versions of the commuted piano and harpsichord is not a polyphonic
 instrument. However, the {\it faust2pd} program developed by Albert
-Graef \cite{faust2pd} makes it possible to automatically produce {\it PureData}
+Graef \cite{faust2pd} makes it possible to automatically produce {\it Pure Data}
 patches that implement polyphonic synthesizers that use FAUST generated
-PD plug-ins. They can then be controlled via MIDI or OSC directly in
-PureData.    
+Pd plug-ins. They can then be controlled via MIDI or OSC directly in
+Pure Data.    
 
 \begin{figure}[ht]
 \begin{center}
         \framebox{\includegraphics[width=\columnwidth]{fig/pianoPatch.pdf}}
-\caption{{\it Synthesis part of the PureData polyphonic sub-patch
+\caption{{\it Synthesis part of the Pure Data polyphonic sub-patch
     generated with faust2pd from ``piano.dsp''. In the current case, a
   height voices polyphony synthesizer is implemented so
   piano$\sim$.dsp is called height times.}}
@@ -417,8 +413,8 @@ PureData.
 \end{center}
 \end{figure}
 
-\section{Using a FAUST-STK physical model with gesture following
-  datas}
+\section{Using a FAUST-STK physical model with gesture-following
+  data}
 
 Parameter values are very important when dealing with physical
 modeling. Indeed, even if in most cases it is possible to produce nice
@@ -426,12 +422,12 @@ sounds with static values for each parameter, the sound quality can be
 improved a lot by using dynamic values that can describe better the state
 of the model in function of the note and the amplitude being played.
 
-E. Maestre worked during his phd on modeling the instrumental gesture
+E. Maestre worked during his PhD on modeling the instrumental gesture
 for the violin \cite{Esteban} at the MTG\footnote{Music Technology
   Group, University Pompeu Fabra, Barcelona (Spain).}. With his help,
 it was possible to modify the algorithm of the bowed instrument from
 the {\it STK} in order to make it compatible to
-gesture datas. The following changes were performed on the model:
+gesture data. The following changes were performed on the model:
 \begin{itemize}
 \item the {\it ADSR} used to control the bow velocity was removed;
 \item a ``force'' parameter that control the slope of the bow table
@@ -441,23 +437,23 @@ gesture datas. The following changes were performed on the model:
   the value of the parameters of each string independently;
 \item the simple body filter was replaced by a bank of biquad filters that apply
   a violin impulse response on the generated sound
-\item an improved reflexion filter also based on a bank of
+\item an improved reflection filter also based on a bank of
   biquad is used.  
 \end{itemize}
 
-The FAUST code was used to create a {\it PureData} plug-in. The gesture datas for
+The FAUST code was used to create a {\it Pure Data} plug-in. The gesture data for
 each physical parameter (note frequencies, bow position, bow velocity,
 bow force and number of the string to be used) of the violin model
-were placed in separated text files that can be used in a {\it PD} patch. In
+were placed in separated text files that can be used in a {\it Pd} patch. In
 the example shown in figure \ref{fig:subPatchViolin}, the values are
-changed every 4.167 milliseconds. The gesture datas used plays a
-traditional spanish song called Muiñeira.     
+changed every 4.167 milliseconds. The gesture data used plays a
+traditional Spanish song called MuiñEira.     
 
 \begin{figure}[ht]
 \begin{center}
         \framebox{\includegraphics[width=\columnwidth]{fig/subPatchViolin.pdf}}
-\caption{{\it PureData sub-patch used to send the gesture datas of
-    Muiñeira in the FAUST generated plug-in.}}
+\caption{{\it Pure Data sub-patch used to send the gesture data of
+    MuiñEira in the FAUST generated plug-in.}}
 \label{fig:subPatchViolin}
 \end{center}
 \end{figure}
@@ -474,9 +470,9 @@ possible.
 
 It would be very hard and inaccurate to compare the raw C++ and
 FAUST codes together as most of the physical models were implemented
-in the {\it Synthesis ToolKit} with several spread out functions that
+in the {\it Synthesis Tool Kit} with several spread out functions that
 are most of the time strewn in different files. Moreover, these
-functions also contains informations that are not related to the
+functions also contains information that are not related to the
 algorithm itself.
 
 Nevertheless, we were able to carry out such a comparison as a rough
@@ -526,14 +522,14 @@ piano.dsp * & 292 & 158 & {\bf 45.9\%} & 750 & 246 & {\bf 67.2\%} \\
 
 The FAUST compiler optimizes the efficiency of its generated C++
 code. Thus, we tried to compare for some models the CPU load between
-{\it PureData} plug-ins created using the {\it stk2pd}\footnote{{\it
+{\it Pure Data} plug-ins created using the {\it stk2pd}\footnote{{\it
     stk2pd} is a program that was developed at Stanford's
   CCRMA by M. Gurevich and C. Chafe. It converts any C++ code from the {\it
-  STK} into a plug-in for {\it PureData} \cite{stk2pd}.} program with
-PD plug-ins generated by FAUST using the {\it PureData} architecture
+  STK} into a plug-in for {\it Pure Data} \cite{stk2pd}.} program with
+Pd plug-ins generated by FAUST using the {\it Pure Data} architecture
 file.
 
-In both cases, PD plug-ins were compiled in 32bits and the signal
+In both cases, Pd plug-ins were compiled in 32bits and the signal
 processing is scalar. Tests were carried out on a MacBook Pro with the
 following configuration:
 \begin{itemize}
@@ -563,7 +559,7 @@ tibetanBowl.dsp & 5,74 & 2,87 & 50 \\
 \hline
 \end{tabular}
 \end{center}
-\caption{{\it Comparison of the performances of PureData plug-ins
+\caption{{\it Comparison of the performances of Pure Data plug-ins
     using the STK C++ code with their FAUST generated equivalent. Values
   in the ``STK'' and ``FAUST'' columns are CPU loads in percents. The
   ``difference'' column give the gain of efficiency in percents.}} 
@@ -574,8 +570,8 @@ tibetanBowl.dsp & 5,74 & 2,87 & 50 \\
 
 Even if the primary goal of the {\it FAUST-STK} is the use of its
 physical models in a musical manner, it was also built to be a
-pedagogical tool. Indeed, because of its transparence and its
-efficiency, the FAUST programing language is particularly
+pedagogical tool. Indeed, because of its transparency and its
+efficiency, the FAUST programming language is particularly
 suitable for teaching digital audio signal processing. Therefore, a
 clean and well commented FAUST code is probably the best way to
 document the implemented instruments.
@@ -589,7 +585,7 @@ and FAUST recently upgraded by the possibility to control the
 generated programs with the
 OSC\footnote{Open Source Control is a content format for messaging
   among computers, sound synthesizers and other multimedia devices.}
-communication standard constitue a high efficiency work platform whose
+communication standard constitute a high efficiency work platform whose
 limits are only constrained by the user imagination.    
 
 \section{Acknowledgments}
