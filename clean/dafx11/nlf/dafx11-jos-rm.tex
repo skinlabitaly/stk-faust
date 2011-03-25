@@ -250,6 +250,64 @@ second-order NLF allpass specified as \texttt{allpassnn(2,tv)}.
 \caption{\label{nlf2}{\it Second-order NLF allpass as drawn by Faust.}}
 \end{figure*} 
 
+\section{Energy Invariance Illustration}
+
+The following Faust program illustrates the energy-invariance property
+of the normalized-ladder allpass for order 3:
+\begin{verbatim}
+import("filter.lib"); // for allpassnn
+N = 3; // order desired
+theta = par(i,N,PI*noise@(10*i+100)); // delay to decorrelate
+rms = ^(2) : smooth(0.9999) : sqrt;
+uvwnoise = sqrt(3)*noise; // unit variance white noise (from uniform on [-1,1])
+process =  uvwnoise <: _, allpassnn(N,theta) : rms, rms;
+\end{verbatim}
+The figure plotted by \texttt{faust2octave} is shown in Figure
+\ref{tapnn2}.  We see that the root-mean-square (RMS) level of the
+input and output signals are almost identical.  Thus, when applied to
+unit-variance white noise, the output signal (and in fact every
+state-variable within the filter) is unit-variance white noise, even
+when the filter coefficients are modulated over their maximum range by
+uncorrelated white noise.
+
+\begin{figure*}[ht]
+\center
+\includegraphics[width=6.5in]{eps/tapnn2.eps}
+\caption{\label{tapnn2}{\it RMS level of input and output signals
+for the third-order normalized-ladder allpass driven by white noise,
+with uncorrelated white noise used as reflection coefficients.}}
+\end{figure*} 
+
+It is interesting to note that if the reflection-coefficients are
+instead computed using \verb!theta = par(i,N,PI*noise@(i+1));!, the
+RMS level of the output signal rises somewhat \emph{above} that of the
+input signal, as shown in Figure \ref{tapnn2tmc}.  Thus, correlations
+between the input signal and the filter coefficients (as occurs in
+nonlinear filtering applications0 can result in some power gain.
+% 
+% FIXME: SHOW THIS BETTER
+
+\begin{figure*}[ht]
+\center
+\includegraphics[width=6.5in]{eps/tapnn2tmc.eps}
+\caption{\label{tapnn2tmc}{\it RMS level of input and output signals
+for the third-order normalized-ladder allpass driven by white noise,
+with weakly correlated white noise used as reflection coefficients.}}
+\end{figure*} 
+
+As another interesting example, if the reflection-coefficients are
+computed using \verb!theta = par(i,N,PI*noise);!, which means all
+reflection coefficients vary together in lock-step with the input
+noise, the RMS level of the output signal falls somewhat \emph{below}
+that of the input signal, as shown in Figure \ref{tapnn2tc}.
+
+\begin{figure*}[ht]
+\center
+\includegraphics[width=6.5in]{eps/tapnn2tc.eps}
+\caption{\label{tapnn2tc}{\it RMS level of input and output signals
+for the third-order normalized-ladder allpass driven by white noise,
+with the same white noise used as reflection coefficients.}}
+\end{figure*} 
 
 \section{Conclusions}
 
@@ -259,7 +317,7 @@ second-order NLF allpass specified as \texttt{allpassnn(2,tv)}.
 {\small\raggedright
 \nocite{*}
 \bibliographystyle{IEEEbib}
-\bibliography{dafx11-jos}
+\bibliography{dafx11-jos-rm}
 }
 
 \end{document}
