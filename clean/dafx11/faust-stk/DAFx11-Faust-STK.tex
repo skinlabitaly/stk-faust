@@ -262,14 +262,11 @@ the program {\it SynthBuilder}.
 Four objects in the {\it FAUST-STK} use the banded waveguide synthesis
 technique (described in \cite{bdWaveGuides}) to model the following
 percussion instruments:
-%
-% JOS: By "plaque" do you mean plate?  
-%      Also, shouldn't "glass plaque" be "glass harmonica"?
-%
+
 \begin{itemize}
 \item an iron plaque;
 \item a wooden plaque;
-\item a glass plaque;
+\item a glass harmonica;
 \item a tibetan bowl.
 \end{itemize}
 
@@ -296,16 +293,14 @@ We adjust the length of the delay line of the instruments that use
 nonlinear allpass filters in function of the nonlinearity factor and
 of the order of the filter as follows:
 \begin{equation}
-DL = (SR/F) - FO \times NF   % JOS: I assume '.' meant '\times'
+DL = (SR/F) - FO \times NF
 \end{equation}
 where DL is the delay length in number of samples, SR is the sampling
 rate, F is the pitch frequency, FO is the filter order and NF the
 nonlinearity factor (value between 0 and 1).
 
-Typically, the nonlinear allpass filter has to be placed just before
-the feedback of the waveguide loop as showed in Figure \ref{fig:clarinetNL}.
-%
-% JOS: Why can't it be elsewhere in the loop?
+The nonlinear allpass filter can be placed anywhere in the waveguide
+loop, for example just before the feedback as showed in Figure \ref{fig:clarinetNL}.
 
 \begin{figure}[ht]
 \begin{center}
@@ -351,7 +346,7 @@ to use the same technique as the one previously explained. Indeed,
 the raw data were extracted from the wave file to be put in an array
 of floats that can be used in a C++ function to return the values with
 an index. This C++ function can then be called in FAUST using the
-foreign function mechanism to fill a buffer with the \texttt{rdtable}
+foreign-function mechanism to fill a buffer with the \texttt{rdtable}
 primitive.
 
 \begin{figure*}[ht]
@@ -601,13 +596,6 @@ generated programs with the OSC\footnote{Open Source Control is a
   other multimedia devices.}  communication standard constitute a high
 efficiency work platform whose limits are only constrained by one's
 imagination.
-
-% JOS: Covered by the footnote on page 1, right?:
-%
-% \section{Acknowledgments}
-% This work was carried out in the frame of the ASTREE\footnote{Analyse
-%   et Synthèse de Traitement en Temps Réel.} project supported
-% by the Agence Nationale de Recherche (ANR-08-CORD-003).
 
 %\newpage
 \nocite{*}
