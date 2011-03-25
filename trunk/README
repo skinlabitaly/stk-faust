@@ -86,6 +86,9 @@ You can find in the gesture-following/ folder an improved version of bowed.dsp t
 datas in PureData (first, type "make" in a terminal and then open playMe.pd). This work has been done with
 the help of E. Maestre (MTG, Barcelona).
 
+The instruments from the Faust-STK have been tested with the OSC support for FAUST implemented with some
+of the architecture files (jackqt, jackgtk, etc.).
+
 3/ How to compile?
 ------------------
 
