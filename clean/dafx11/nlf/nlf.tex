@@ -258,9 +258,9 @@ The following Faust program illustrates the energy-invariance property
 of the normalized-ladder allpass for order 3:
 \begin{verbatim}
 import("filter.lib"); // for allpassnn
-N = 3; // order desired
+N = 3; // allpass filter order
 theta = par(i,N,PI*noise@(i+1));
-rms = ^(2) : smooth(0.9999) : sqrt;
+rms = ^(2) : smooth(0.999) : sqrt;
 uvwnoise = sqrt(3)*noise; // unit variance
 process =  uvwnoise <: _, allpassnn(N,theta) 
            : rms, rms;
@@ -275,7 +275,7 @@ uncorrelated white noise.
 
 \begin{figure}[ht]
 \center
-\includegraphics[width=3.6in]{eps/tapnn2.eps}
+\includegraphics[width=4in]{eps/tapnn2.eps}
 \caption{\label{tapnn2}{\it RMS level of input and output signals
 for the third-order normalized-ladder allpass driven by white noise,
 with uncorrelated white noise used as reflection coefficients.}}
