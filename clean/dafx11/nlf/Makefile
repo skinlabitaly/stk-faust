@@ -11,5 +11,10 @@ pdf p: all
 pdfo po: $(NAME).pdf
 	open $(NAME).pdf
 
-clean tclean:
-	/bin/rm $(NAME).dvi $(NAME).aux *~ $(NAME).log $(NAME).out $(NAME).bbl $(NAME).d $(NAME).bak $(NAME).blg
+clean:
+	-/bin/rm $(NAME).dvi $(NAME).aux *~ $(NAME).log $(NAME).out $(NAME).bbl $(NAME).d $(NAME).bak $(NAME).blg
+
+tclean: clean
+	-/bin/rm eps/*-eps-converted-to.pdf
+	/bin/rm $(NAME).pdf
+
