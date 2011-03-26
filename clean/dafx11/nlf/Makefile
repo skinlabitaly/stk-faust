@@ -1,4 +1,4 @@
-NAME = dafx11-jos-rm
+NAME = nlf
 
 all: $(NAME).tex $(NAME).bib
 	pdflatex $(NAME)
