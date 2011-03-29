@@ -162,7 +162,7 @@ caused by its curved bridge \cite{FletcherAndRossing98}.  Similarly,
 the tambura nonlinearly modulates its string length between two
 lengths via a cotton thread near the bridge
 \cite{FletcherAndRossing98}.  In digital waveguide models such as
-\texttt{Sitar.cpp} in the Synthesis Tool Kit (STK) \cite{STK4},
+\texttt{Sitar.cpp} in the Synthesis ToolKit (STK) \cite{STK4},
 delay-line length is modulated without careful regard for energy
 conservation; this normally works out fine in practice because
 lengthening a delay-line is energy conserving when the new samples
@@ -175,7 +175,7 @@ We propose to extend the nonlinear switching allpass in two ways:
 \begin{enumerate}
 \item Any order allpass can be used (not just first order).
 \item Any kind of coefficient modulation can be used (not just
-  switching between two values at zero crossings of some state).
+  switching between two values at zero crossings of some state variable).
 \end{enumerate}
 Our method is based on the Normalized Ladder Filter (NLF)
 \cite{GrayAndMarkel75}. Such filters can be derived from digital
@@ -216,7 +216,7 @@ distribution (\texttt{filter.lib} after 2/2/11).
 
 A general property of allpass filters is that each delay element can
 be replaced by an allpass to produce another allpass (a
-circle-to-circle conformal map of the transfer function).  If the
+unit-circle to unit-circle conformal map of the transfer function).  If the
 delay element in Fig.{} \ref{nlf} is replaced by itself at the output
 of another first-order allpass of the same form (Fig.{} \ref{nlf}),
 then a second-order NLF allpass is obtained.  This process is extended
@@ -224,15 +224,18 @@ to arbitrary orders by replacing the rightmost delay by a first-order
 NLF allpass followed by a delay.  This same recursive construction
 works also for the Kelly-Lochbaum ladder allpass, and the
 two-multiply and one-multiply lattice structures \cite{MG,PASP}.
+It was used to show equivalence of the two-multiply lattice structure
+to direct-form-II first-order nested allpass filters in
+\cite{MassieAES93,MG}.  
 
 In Faust, NLF allpass filters of arbitrary order are conveniently
-specified by means of the pattern matching facility:
+specified by means of the pattern-matching facility:
 \begin{samepage}
 \begin{verbatim}
 allpassnn(0,tv) = _;
 allpassnn(n,tv) = _ <: *(s), (*(c) : 
   (+ : allpassnn(n-1,tv))~(*(-s))) 
-  : _,*(c)':+
+  : _,mem*c:+
   with { 
     c=cos(take(n,tv));  s=sin(take(n,tv)); 
   };
@@ -281,9 +284,9 @@ for the third-order normalized-ladder allpass driven by white noise,
 with uncorrelated white noise used as reflection coefficients.}}
 \end{figure} 
 
-\section{Conclusions}
+\section{Applications}
 
-\section{Acknowledgments}
+\section{Conclusions}
 
 %\newpage
 {\small\raggedright

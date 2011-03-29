@@ -1,3 +1,4 @@
+% Invoke after faust2octave tapnn2.dsp
 set (0, "defaultaxesfontname", "Helvetica")
 set (0, "defaultaxesfontsize", 20)
 set (0, "defaulttextfontname", "Helvetica")
