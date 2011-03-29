@@ -2,7 +2,7 @@
 %
 % To generate the correct references using BibTeX, run latex, bibtex, latex, latex
 
-\def\papertitle{Nonlinear Allpass Ladder Filters in Faust}
+\def\papertitle{Nonlinear Allpass Ladder Filters in FAUST}
 \def\paperauthorA{Julius O. Smith}
 \def\paperauthorB{Romain Michon}
 
@@ -66,6 +66,8 @@
 }
 
 \newcommand{\zi}{z^{-1}}
+\newcommand{\Faust}{\textsc{Faust}}
+\newcommand{\Faustsp}{\Faust\ }
 \begin{document}
 % more pdf-tex settings:
 \ifpdf % used graphic file format for pdflatex
@@ -80,7 +82,7 @@
   Passive nonlinear filters provide a rich source of evolving spectra
   for sound synthesis.  This paper describes a nonlinear allpass
   filter of arbitrary order based on the normalized ladder filter.  It
-  is expressed in Faust recursively in only two statements.  Toward
+  is expressed in \Faustsp recursively in only two statements.  Toward
   the synthesis of cymbals and gongs, it was used to make nonlinear
   waveguide meshes and feedback-delay-network reverberators.
 \end{abstract}
@@ -198,7 +200,7 @@ coefficients $c=\cos(\theta)$ and $s=\sin(\theta)$, $\theta\in[-\pi,\pi]$.}}
 \end{figure}
 
 Figure \ref{nlf1} shows the same filter as it is depicted in the block diagram
-rendered by ``\texttt{faust -svg}'' for the Faust expression
+rendered by ``\texttt{faust -svg}'' for the \Faustsp expression
 %\begin{quote}
 % {\small
 \begin{verbatim}
@@ -207,14 +209,15 @@ process =
 \end{verbatim}
 % }
 %\end{quote}
-The function \texttt{allpassnn(1)} is equivalent to this in the Faust
+The function \texttt{allpassnn(1)} is equivalent to this in the \Faustsp
 distribution (\texttt{filter.lib} after 2/2/11).
 
 % rsvg-convert --format=ps tapnnfig-svg/process.svg > nlf1.eps
 \begin{figure}[ht]
 %\centerline{\includegraphics[scale=0.33]{eps/nlf1.eps}}
 \centerline{\includegraphics[scale=0.33]{fig/nlf1.pdf}}
-\caption{\label{nlf1}{\it First-order normalized ladder allpass filter as drawn by Faust.}}
+\caption{\label{nlf1}{\it First-order normalized ladder allpass filter
+    as drawn by \texttt{faust -svg}.}}
 \end{figure}
 
 A general property of allpass filters is that each delay element can
@@ -231,7 +234,7 @@ It was used to show equivalence of the two-multiply lattice structure
 to direct-form-II first-order nested allpass filters in
 \cite{MassieAES93,MG}.  
 
-In Faust, NLF allpass filters of arbitrary order are conveniently
+In \Faust, NLF allpass filters of arbitrary order are conveniently
 specified by means of the pattern-matching facility:
 \begin{samepage}
 \begin{verbatim}
@@ -255,12 +258,13 @@ second-order NLF allpass specified as \texttt{allpassnn(2,tv)}.
 %\includegraphics[width=5in,bb=3 257 607 534]{eps/nlf2.eps}
 %\includegraphics[width=6.5in]{eps/nlf2.eps}
 \includegraphics[width=6.5in]{fig/nlf2.pdf}
-\caption{\label{nlf2}{\it Second-order NLF allpass as drawn by Faust.}}
+\caption{\label{nlf2}{\it Second-order NLF allpass as drawn by
+    \texttt{faust -svg}.}}
 \end{figure*} 
 
 \section{Energy Invariance Illustration}
 
-The following Faust program illustrates the energy-invariance property
+The following \Faustsp program illustrates the energy-invariance property
 of the normalized-ladder allpass for order 3:
 \begin{verbatim}
 import("filter.lib"); // for allpassnn
@@ -294,18 +298,19 @@ curves are nearly indistinguishable.}}
 
 A simple example terminating a square waveguide mesh with nonlinear
 allpass filters is shown in Figures \ref{meshc} and \ref{allpassbank},
-generated from the following Faust source:
+generated from the following \Faustsp source:
 \begin{verbatim}
-import("effect.lib");
-NA=1; // allpass order (positive integer)
-napcoeffs(x)=par(i,NA,x); // nonlinear coeffs
-apbranch(NA,i,x) = allpassnn(NA,napcoeffs(x),x);
-allpassbank(M,NA,x) = bus(M)
-    : par(i,M-1,apbranch(NA,i)), 
-                apbranch(NA,M-1) + x;
-nlmesh(N,NA,x) = mesh_square(N)
-            ~(allpassbank(4*N,NA,x));
-N=2; 
+import("effect.lib"); // for mesh_square()
+nlmesh(N,NA,x)=mesh_square(N)~(apbank(4*N,x)) 
+with {
+  coeffs(x)=par(i,NA,x); // e.g.
+  apbranch(i,x) = allpassnn(NA,coeffs(x),x);
+  apbank(M,x) = bus(M)
+    : par(i,M-1,apbranch(i)), 
+                apbranch(M-1) + x; 
+};
+N=2;  // mesh order (nonnegative power of 2)
+NA=1; // allpass order (any positive integer)
 process = nlmesh(N,NA);
 \end{verbatim}
 The input signal is added into a corner of the mesh, where all modes
@@ -314,9 +319,8 @@ are excited.
 \begin{figure*}[ht]
 \center
 \includegraphics[width=6.5in]{fig/meshc.pdf}
-\caption{\label{meshc}{\it $2\times2$ square rectangular
-    waveguide mesh terminated on nonlinear allpass filters around its
-    rim.}}
+\caption{\label{meshc}{\it $2\times2$ square waveguide mesh terminated
+    on nonlinear allpass filters around its rim.}}
 \end{figure*} 
 
 \begin{figure}[ht]
@@ -343,6 +347,13 @@ spectral centroid.  A valuable performable dimension is the degree of
 nonlinearity, implemented by a scale factor on the reflection
 coefficients.  (When the reflection coefficients are all zero, the
 allpass reduces to a pure delay.)
+
+\subsection{Nonlinear Tubes and Strings}
+
+In a companion paper \cite{FAUST-STK}, we report on applications of
+the nonlinear allpass to \Faustsp implementations of digital waveguide
+synthesis instruments.  Especially nice results were obtained for the
+clarinet and harpsichord.
 
 \section{Conclusions}
 
