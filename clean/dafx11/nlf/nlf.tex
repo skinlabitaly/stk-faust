@@ -77,9 +77,12 @@
 \maketitle
 
 \begin{abstract}
-Passive nonlinear filters provide a rich source of evolving spectra
-for sound synthesis.  This paper describes ...
-
+  Passive nonlinear filters provide a rich source of evolving spectra
+  for sound synthesis.  This paper describes a nonlinear allpass
+  filter of arbitrary order based on the normalized ladder filter.  It
+  is expressed in Faust recursively in only two statements.  Toward
+  the synthesis of cymbals and gongs, it was used to make nonlinear
+  waveguide meshes and feedback-delay-network reverberators.
 \end{abstract}
 
 \section{Introduction}
@@ -281,15 +284,77 @@ uncorrelated white noise.
 \includegraphics[width=4in]{eps/tapnn2.eps}
 \caption{\label{tapnn2}{\it RMS level of input and output signals
 for the third-order normalized-ladder allpass driven by white noise,
-with uncorrelated white noise used as reflection coefficients.}}
+with uncorrelated white noise used as reflection coefficients.  The two
+curves are nearly indistinguishable.}}
 \end{figure} 
 
 \section{Applications}
 
+\subsection{Nonlinear Waveguide Mesh}
+
+A simple example terminating a square waveguide mesh with nonlinear
+allpass filters is shown in Figures \ref{meshc} and \ref{allpassbank},
+generated from the following Faust source:
+\begin{verbatim}
+import("effect.lib");
+NA=1; // allpass order (positive integer)
+napcoeffs(x)=par(i,NA,x); // nonlinear coeffs
+apbranch(NA,i,x) = allpassnn(NA,napcoeffs(x),x);
+allpassbank(M,NA,x) = bus(M)
+    : par(i,M-1,apbranch(NA,i)), 
+                apbranch(NA,M-1) + x;
+nlmesh(N,NA,x) = mesh_square(N)
+            ~(allpassbank(4*N,NA,x));
+N=2; 
+process = nlmesh(N,NA);
+\end{verbatim}
+The input signal is added into a corner of the mesh, where all modes
+are excited.
+
+\begin{figure*}[ht]
+\center
+\includegraphics[width=6.5in]{fig/meshc.pdf}
+\caption{\label{meshc}{\it $2\times2$ square rectangular
+    waveguide mesh terminated on nonlinear allpass filters around its
+    rim.}}
+\end{figure*} 
+
+\begin{figure}[ht]
+\centerline{\includegraphics[scale=0.33]{fig/allpassbank.pdf}}
+\caption{\label{allpassbank}{\it Nonlinear allpass bank showing mesh corner
+    excitation.}}
+\end{figure}
+
+\subsection{Nonlinear Feedback Delay Network}
+
+It was reasoned that the higher-order nonlinear allpass might enable
+structures simpler than a full waveguide mesh for simulating
+nonlinearly coupled modes.  Thus, another test along these lines was
+to insert the nonlinear allpass into each lane of a Feedback Delay
+Network (FDN) reverberator (trivially modifying \texttt{fdnrev0} in
+\texttt{effect.lib}).  The nonlinear ``reverberator'' so obtain was
+then tested by listening to its impulse response.  While simple
+cymbals were not obtainable for the cases tried, some very nice
+metallic-plate synthesis was obtained, especially when using small
+delay-line lengths in the FDN reverb.  An interesting sonic phenomenon
+obtained was a rising perceptual pitch as the impulse density was
+increased.  In other words, a faster ``drum roll'' has a higher
+spectral centroid.  A valuable performable dimension is the degree of
+nonlinearity, implemented by a scale factor on the reflection
+coefficients.  (When the reflection coefficients are all zero, the
+allpass reduces to a pure delay.)
+
 \section{Conclusions}
 
+The nonlinear allpass based on a recursively defined normalized ladder
+filter was found to be useful for the nonlinear synthesis of metallic
+plates by terminating a waveguide mesh on its rim and by inserting it
+in the feedback paths of an FDN reverberator.  By varying the degree
+of nonlinearity, a useful performance dimension is obtained.
+
 %\newpage
-{\small\raggedright
+{%\small
+\raggedright
 \nocite{*}
 \bibliographystyle{IEEEbib}
 \bibliography{nlf}
