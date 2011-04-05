@@ -33,7 +33,6 @@ delayLine = delay(4096,delayLength);
 
 //the loop gain control the resonance duration
 loopGain = 0.895 + resonance + (freq*0.0000005);
-amGain = 0.1*gain;
 
 //feedback filter is a one zero (declared in instrument.lib)
 filter = oneZero1(b0,b1)
@@ -43,5 +42,5 @@ filter = oneZero1(b0,b1)
 		b1 = -zero*b0;
 	};
 
-process = (*(loopGain) : filter + (envelope*noise*amGain))~delayLine : *(8) : 
+process = (*(loopGain) : filter + (envelope*noise*gain))~delayLine : 
 stereo : hgroup("Reverb[3]",component("freeverb.dsp"));
