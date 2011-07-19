@@ -11,32 +11,32 @@ import("instrument.lib");
 
 //==================== GUI SPECIFICATION ================
 
-freq = nentry("h:Basic Parameters/freq [1][unit:Hz] [tooltip:Tone frequency]",440,20,20000,1) : smooth(0.999);
-gain = nentry("h:Basic Parameters/gain [1][tooltip:Gain (value between 0 and 1)]",1,0,1,0.01); 
-gate = button("h:Basic Parameters/gate [1][tooltip:noteOn = 1, noteOff = 0]");
+freq = nentry("h:Basic_Parameters/freq [1][unit:Hz] [tooltip:Tone frequency]",440,20,20000,1);
+gain = nentry("h:Basic_Parameters/gain [1][tooltip:Gain (value between 0 and 1)]",1,0,1,0.01); 
+gate = button("h:Basic_Parameters/gate [1][tooltip:noteOn = 1, noteOff = 0]");
 
-phoneme = hslider("v:Physical Parameters/Phoneme
+phoneme = hslider("v:Physical_Parameters/Phoneme
 [2][tooltip:0->eee, 1->ihh, 2->ehh, 3->aaa, 4->ahh, 5->aww, 6->ohh, 7->uhh, 8->uuu, 9->ooo, 10->rrr, 11->lll, 12->mmm, 13->nnn, 14->nng, 15->ngg, 16->fff, 17->sss, 18->thh, 19->shh, 20->xxx, 21->hee, 22->hoo, 23->hah, 24->bbb, 25->ddd, 26->jjj, 27->ggg, 28->vvv, 29->zzz, 30->thz, 31->zhh]",4,0,31,1);
 
-vibratoFreq = hslider("h:Envelopes and Vibrato/v:Vibrato Parameters/Vibrato Freq 
+vibratoFreq = hslider("h:Envelopes_and_Vibrato/v:Vibrato_Parameters/Vibrato_Freq 
 [3][unit:Hz]",6,1,15,0.1);
-vibratoGain = hslider("h:Envelopes and Vibrato/v:Vibrato Parameters/Vibrato Gain
+vibratoGain = hslider("h:Envelopes_and_Vibrato/v:Vibrato_Parameters/Vibrato_Gain
 [3][tooltip:A value between 0 and 1]",0.05,0,1,0.01);
-vibratoBegin = hslider("h:Envelopes and Vibrato/v:Vibrato Parameters/Vibrato Begin
+vibratoBegin = hslider("h:Envelopes_and_Vibrato/v:Vibrato_Parameters/Vibrato_Begin
 [3][unit:s][tooltip:Vibrato silence duration before attack]",0.05,0,2,0.01);
-vibratoAttack = hslider("h:Envelopes and Vibrato/v:Vibrato Parameters/Vibrato Attack 
+vibratoAttack = hslider("h:Envelopes_and_Vibrato/v:Vibrato_Parameters/Vibrato_Attack 
 [3][unit:s][tooltip:Vibrato attack duration]",0.5,0,2,0.01);
-vibratoRelease = hslider("h:Envelopes and Vibrato/v:Vibrato Parameters/Vibrato Release 
+vibratoRelease = hslider("h:Envelopes_and_Vibrato/v:Vibrato_Parameters/Vibrato_Release 
 [3][unit:s][tooltip:Vibrato release duration]",0.1,0,2,0.01);
 
-voicedEnvelopeAttack = hslider("h:Envelopes and Vibrato/v:Envelope Parameters/Voiced Attack
+voicedEnvelopeAttack = hslider("h:Envelopes_and_Vibrato/v:Envelope_Parameters/Voiced_Attack
 [4][unit:s][tooltip:Voiced sounds attack duration]",0.01,0,2,0.01);
-voicedEnvelopeRelease = hslider("h:Envelopes and Vibrato/v:Envelope Parameters/Voiced Release
+voicedEnvelopeRelease = hslider("h:Envelopes_and_Vibrato/v:Envelope_Parameters/Voiced_Release
 [4][unit:s][tooltip:Voiced sounds release duration]",0.01,0,2,0.01);
 
-noiseEnvelopeAttack = hslider("h:Envelopes and Vibrato/v:Envelope Parameters/Noised Attack
+noiseEnvelopeAttack = hslider("h:Envelopes_and_Vibrato/v:Envelope_Parameters/Noised_Attack
 [4][unit:s][tooltip:Noised sounds attack duration]",0.001,0,2,0.001);
-noiseEnvelopeRelease = hslider("h:Envelopes and Vibrato/v:Envelope Parameters/Noised Release
+noiseEnvelopeRelease = hslider("h:Envelopes_and_Vibrato/v:Envelope_Parameters/Noised_Release
 [4][unit:s][tooltip:Noised sounds release duration]",0.001,0,2,0.001);
 
 //==================== SIGNAL PROCESSING ================
@@ -75,22 +75,22 @@ phonemeGains = ffunction(float loadPhonemeGains(int,int), <phonemes.h>,"");
 phonemeParameters = ffunction(float loadPhonemeParameters(int,int,int), <phonemes.h>,"");
 
 //formants frequencies
-ffreq0 = phonemeParameters(phoneme,0,0);
-ffreq1 = phonemeParameters(phoneme,1,0);
-ffreq2 = phonemeParameters(phoneme,2,0);
-ffreq3 = phonemeParameters(phoneme,3,0);
+ffreq0 = phonemeParameters(phoneme,0,0) : smooth(0.999);
+ffreq1 = phonemeParameters(phoneme,1,0) : smooth(0.999);
+ffreq2 = phonemeParameters(phoneme,2,0) : smooth(0.999);
+ffreq3 = phonemeParameters(phoneme,3,0) : smooth(0.999);
 
 //formants radius
-frad0 = phonemeParameters(phoneme,0,1);
-frad1 = phonemeParameters(phoneme,1,1);
-frad2 = phonemeParameters(phoneme,2,1);
-frad3 = phonemeParameters(phoneme,3,1);
+frad0 = phonemeParameters(phoneme,0,1) : smooth(0.999);
+frad1 = phonemeParameters(phoneme,1,1) : smooth(0.999);
+frad2 = phonemeParameters(phoneme,2,1) : smooth(0.999);
+frad3 = phonemeParameters(phoneme,3,1) : smooth(0.999);
 
 //formants gains
-fgain0 = phonemeParameters(phoneme,0,2) : pow(10,(_/20));
-fgain1 = phonemeParameters(phoneme,1,2) : pow(10,(_/20));
-fgain2 = phonemeParameters(phoneme,2,2) : pow(10,(_/20));
-fgain3 = phonemeParameters(phoneme,3,2) : pow(10,(_/20));
+fgain0 = phonemeParameters(phoneme,0,2) : pow(10,(_/20)) : smooth(0.999);
+fgain1 = phonemeParameters(phoneme,1,2) : pow(10,(_/20)) : smooth(0.999);
+fgain2 = phonemeParameters(phoneme,2,2) : pow(10,(_/20)) : smooth(0.999);
+fgain3 = phonemeParameters(phoneme,3,2) : pow(10,(_/20)) : smooth(0.999);
 
 //gain of the voiced part od the sound
 voiceGain = phonemeGains(phoneme,0) : smooth(0.999);
@@ -121,4 +121,4 @@ frica = noise*noiseEnvelope*noiseGain;
 
 process = voiced : oneZeroFilter : onePoleFilter : 
 		 +(frica) <: filter0,filter1,filter2,filter3 :> + : stereo : 
-		 hgroup("Reverb[6]",component("freeverb.dsp"));
+		 instrReverb;
