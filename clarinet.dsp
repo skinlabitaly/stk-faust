@@ -106,4 +106,4 @@ process =
 	(delayLine : NLFM) : 
 	
 	//scaling and stereo
-	*(gain) : stereo : instrReverb; 
+	*(gain)*1.5 : stereo : instrReverb; 
