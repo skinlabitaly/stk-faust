@@ -25,7 +25,7 @@ of its algorithms use the waveguide synthesis technique but some of them are als
 Our attention has partly been focused on the pedagogical aspect of the implemented objects. Indeed, 
 we tried to make the FAUST code of each objects as optimized and as expressive as possible.
 
-Some of the instruments in the (FAUST-STK) use nonlinear allpass filters to create interesting and 
+Some of the instruments in the FAUST-STK use nonlinear allpass filters to create interesting and 
 new behaviors. Also, most of them can be used with gesture following datas (see the /gesture-following folder
 for some examples).
 
