@@ -9,23 +9,23 @@ dspsrc  		:= $(wildcard *.dsp)
 cppsrc  		:= $(addprefix $(DEST), $(dspsrc:.dsp=.cpp))
 patches			:= $(addprefix $(DEST),  $(dspsrc:.dsp=.pd))
 FAUST2PD 		:= faust2pd
-F2PDFLAGS 		:= -n 1 -s
-OPTIONAL := -I ./
+OPTIONAL 		:= -I ./
+FREEVERB 		:= freeverb.dsp.xml
 
 ###--------------------------------------------
 ### compilation flags for Linux
+### include dir must contain m_pd.h
 ###
 LINUXCFLAGS 	:= -DPD -O2 -funroll-loops -fomit-frame-pointer -fPIC \
-    -Wall -W -Wshadow -Wno-unused -Wno-parentheses -Wno-switch $(CFLAGS)
-LINUXINCLUDE 	:=
+                   -Wall $(CXXFLAGS)
+LINUXINCLUDE 	:= -I/usr/include/pdextended
 
 ###--------------------------------------------
 ### compilation flags for Darwin
 ###
-DARWINCFLAGS 	:= -DPD -O2 -funroll-loops -fomit-frame-pointer -fPIC \
-      -Wall -W -Wshadow -Wno-unused -Wno-parentheses -Wno-switch $(CFLAGS)
+DARWINCFLAGS 	:= -DPD -O2 -funroll-loops -fomit-frame-pointer -fPIC -Wall -msse
 DYNLOAD_FLAGS	:= -bundle -undefined suppress -flat_namespace
-DARWININCLUDE 	:= -I/Applications/Pd-extended.app/Contents/Resources/include/
+DARWININCLUDE 	:= -I/Applications/Pd-extended.app/Contents/Resources/include/  -I/opt/local/include
 
 ###--------------------------------------------
 ### check what type of modules to build (MacOSX Darwin or Linux)
@@ -46,14 +46,16 @@ hasfaust2pd := $(findstring /faust2pd, $(helper))
 
 ifeq ($(hasfaust2pd),)
 	todo:=$(modules)
+	message:="*** Install <faust>/tools/faust2pd if you want the example Pd patches to work ***"
 else
 	todo:=$(modules) $(patches)
+	message:="Compiled: $(todo)"
 endif
 
 ###--------------------------------------------
 
 
-allmodules: $(todo)
+allmodules: $(todo) print_message
 
 $(DEST)%.cpp: %.dsp
 	faust -a $(ARCH) $< -o $@
@@ -65,10 +67,13 @@ $(DEST)%.pd: %.dsp
 	rm -f $<.xml
 
 $(DEST)%~.pd_linux: $(DEST)%.cpp
-	$(CXX) $(INC) $(LINUXCFLAGS) $(LINUXINCLUDE) $(LIB) $(OPTIONAL) -shared -Dmydsp=$(patsubst %~.pd_linux,%,$(notdir $@)) $< -o $@
+	$(CXX) $(LINUXCFLAGS) $(LINUXINCLUDE) $(OPTIONAL) -shared -Dmydsp=$(patsubst %~.pd_linux,%,$(notdir $@)) $< -o $@
 
 $(DEST)%~.pd_darwin: $(DEST)%.cpp
-	$(CXX) $(INC) $(DARWINCFLAGS) $(DARWININCLUDE) $(LIB) $(DYNLOAD_FLAGS) $(OPTIONAL) -Dmydsp=$(patsubst %~.pd_darwin,%,$(notdir $@)) $< -o $@
+	$(CXX) $(DARWINCFLAGS) $(DARWININCLUDE) $(DYNLOAD_FLAGS) $(OPTIONAL) -Dmydsp=$(patsubst %~.pd_darwin,%,$(notdir $@)) $< -o $@
+
+print_message:
+	echo $(message)
 
 clean:
 	rm -rf $(DEST)

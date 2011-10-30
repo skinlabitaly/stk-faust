@@ -63,9 +63,9 @@ bodyFilter = bandPass(108,0.997);
 reflexionFilter = poleZero(b0,b1,a1)
 	   with{
 		//filter coefficients are stored in a C++ function
-		loopFilterb0 = ffunction(float getValueBassLoopFilterb0(float), <bass.h>,"");
-		loopFilterb1 = ffunction(float getValueBassLoopFilterb1(float), <bass.h>,"");
-		loopFiltera1 = ffunction(float getValueBassLoopFiltera1(float), <bass.h>,"");
+		loopFilterb0 = ffunction(float getValueBassLoopFilterb0(float), <instrument.h>,"");
+		loopFilterb1 = ffunction(float getValueBassLoopFilterb1(float), <instrument.h>,"");
+		loopFiltera1 = ffunction(float getValueBassLoopFiltera1(float), <instrument.h>,"");
 		freqToNoteNumber = (log - log(440))/log(2)*12 + 69 + 0.5 : int;
 		freqn = freq : freqToNoteNumber;
 		b0 = loopFilterb0(freqn);
@@ -80,4 +80,4 @@ resonanceGain = gate + (gate < 1 <: *(asympT60(1,0.9,0.05)));
 
 process = excitation : 
 	(+)~(delayLine : NLFM : reflexionFilter*resonanceGain) <: 
-	bodyFilter*1.5 + *(0.5) : *(4) : stereo : instrReverb;
+	bodyFilter*1.5 + *(0.5) : *(4) : stereo; // : instrReverb;
