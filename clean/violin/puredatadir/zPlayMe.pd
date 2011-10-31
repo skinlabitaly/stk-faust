@@ -1,4 +1,4 @@
-#N canvas 53 44 945 666 10;
+#N canvas 121 41 945 666 10;
 #X obj -55 180 violin~;
 #X obj 3 232 metro 100;
 #X obj 3 255 env~;
@@ -141,35 +141,31 @@
 #X msg 76 71 kreutzer2_saltato;
 #X msg 73 93 kreutzer2_saltato_pp;
 #X msg 76 119 kreutzer2_saltato_ff;
-#N canvas 470 302 951 585 reverb 1;
-#X obj -797 121 zita_rev1;
-#X obj -794 -14 inlet;
-#X text -605 73 - level of unprocessed signal \, between 0 and 1 (default:
+#N canvas 468 94 951 504 reverb 0;
+#X obj -769 161 zita_rev1;
+#X obj -766 26 inlet;
+#X text -577 113 - level of unprocessed signal \, between 0 and 1 (default:
 0);
-#X text -564 53 - level of reverbed signal \, between 0 and 1 (default:
+#X text -536 93 - level of reverbed signal \, between 0 and 1 (default:
 0.3);
-#X msg -666 52 Dry-Wet-Mix 0.2;
-#X msg -665 7 Mid-RT60 1;
-#X text -551 31 - high-frequency damping corner frequency;
-#X text -579 7 - time to decay by 60 dB at middle frequencies;
-#X msg -665 -42 Low-RT60 2;
-#X text -575 -42 - time to decay 60 dB at low frequencies;
-#X text -575 -15 - cross-over frequency between low and middle frequencies
+#X msg -638 92 Dry-Wet-Mix 0.2;
+#X msg -637 47 Mid-RT60 1;
+#X text -523 71 - high-frequency damping corner frequency;
+#X text -551 47 - time to decay by 60 dB at middle frequencies;
+#X msg -637 -2 Low-RT60 2;
+#X text -547 -2 - time to decay 60 dB at low frequencies;
+#X text -547 25 - cross-over frequency between low and middle frequencies
 ;
-#X msg -665 -17 LF-X 1000;
-#X msg -666 30 HF-Damping 4000;
-#X msg -663 74 Level -10;
-#X obj -380 357 outlet~;
-#X obj 18 348 outlet~;
-#X obj -388 87 inlet~;
-#X obj 24 85 inlet~;
-#X obj 267 52 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
--1;
-#X obj 277 62 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
--1;
-#X obj -715 -49 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+#X msg -637 23 LF-X 1000;
+#X msg -638 70 HF-Damping 4000;
+#X msg -635 114 Level -10;
+#X obj -355 380 outlet~;
+#X obj 60 379 outlet~;
+#X obj -356 131 inlet~;
+#X obj 59 132 inlet~;
+#X obj -687 -9 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
-#X text -735 -69 set defaults;
+#X text -707 -29 set defaults;
 #X connect 0 1 14 0;
 #X connect 0 2 15 0;
 #X connect 1 0 0 0;
@@ -185,7 +181,7 @@
 #X connect 13 0 0 0;
 #X connect 16 0 0 1;
 #X connect 17 0 0 2;
-#X connect 20 0 8 0;
+#X connect 18 0 8 0;
 #X restore 155 330 pd reverb;
 #X connect 0 0 12 0;
 #X connect 0 1 2 0;
