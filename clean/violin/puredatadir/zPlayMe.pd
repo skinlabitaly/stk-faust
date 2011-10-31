@@ -1,4 +1,4 @@
-#N canvas 178 48 1262 724 10;
+#N canvas 53 44 945 666 10;
 #X obj -55 180 violin~;
 #X obj 3 232 metro 100;
 #X obj 3 255 env~;
@@ -98,52 +98,99 @@
 #X connect 35 0 16 0;
 #X connect 36 0 17 0;
 #X restore -55 153 pd gestureDatas;
-#X msg 181 105 bang;
-#X msg 114 99 rewind;
-#X obj 114 67 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+#X msg 314 70 bang;
+#X msg 247 64 rewind;
+#X obj 247 32 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
 -1;
-#X text 182 85 play;
-#X obj 101 29 loadbang;
-#X msg 323 345 start;
-#X msg 376 345 stop;
+#X text 315 50 play;
+#X obj 234 -6 loadbang;
+#X msg 339 446 start;
+#X msg 392 446 stop;
 #X obj -165 471 audio-out;
 #X obj 24 405 *~;
 #X floatatom -28 338 3 -99 300 0 - - -;
 #X obj -28 366 dbtorms;
 #X obj 62 405 *~;
-#X text 343 251 - level of unprocessed signal \, between 0 and 1 (default:
+#X text 326 285 - level of unprocessed signal \, between 0 and 1 (default:
 0);
-#X text 380 230 - level of reverbed signal \, between 0 and 1 (default:
+#X text 363 264 - level of reverbed signal \, between 0 and 1 (default:
 0.3);
 #X text 39 274 <- rms dB.;
-#X msg 311 98 bang;
-#X msg 286 293 open -wave /media/sf_W7_C_DRIVE/Users/estefield/Documents/PROJECTS/VIOLIN_PM/soundTests/test.wav
+#X msg 233 117 bang;
+#X msg 302 394 open -wave /media/sf_W7_C_DRIVE/Users/estefield/Documents/PROJECTS/VIOLIN_PM/soundTests/test.wav
 ;
-#X obj 286 398 writesf~ 2;
+#X obj 302 499 writesf~ 2;
 #X msg -174 113 bang;
 #X text -178 82 read gestures;
-#X text -76 44 directory;
-#X text -12 21 basefilename;
+#X text -74 108 directory;
+#X text -7 109 basefilename;
 #X text -72 315 level in dB;
 #X obj -156 228 print message;
 #X msg -11 86 muneira;
-#X obj 108 458 zita_rev1;
-#X msg 282 230 Dry-Wet-Mix 0.2;
-#X msg 283 185 Mid-RT60 1;
-#X text 393 208 - high-frequency damping corner frequency;
-#X text 369 185 - time to decay by 60 dB at middle frequencies;
-#X msg 283 136 Low-RT60 2;
-#X text 373 136 - time to decay 60 dB at low frequencies;
-#X text 373 163 - cross-over frequency between low and middle frequencies
+#X msg 265 264 Dry-Wet-Mix 0.2;
+#X msg 266 219 Mid-RT60 1;
+#X text 376 242 - high-frequency damping corner frequency;
+#X text 352 219 - time to decay by 60 dB at middle frequencies;
+#X msg 266 170 Low-RT60 2;
+#X text 356 170 - time to decay 60 dB at low frequencies;
+#X text 356 197 - cross-over frequency between low and middle frequencies
 ;
-#X msg 283 161 LF-X 1000;
-#X msg 282 208 HF-Damping 4000;
-#X msg 285 252 Level -10;
-#X msg -1 110 kreutzer2_saltato;
+#X msg 266 195 LF-X 1000;
+#X msg 265 242 HF-Damping 4000;
+#X msg 265 289 Level -10;
+#X msg 76 71 kreutzer2_saltato;
+#X msg 73 93 kreutzer2_saltato_pp;
+#X msg 76 119 kreutzer2_saltato_ff;
+#N canvas 470 302 951 585 reverb 1;
+#X obj -797 121 zita_rev1;
+#X obj -794 -14 inlet;
+#X text -605 73 - level of unprocessed signal \, between 0 and 1 (default:
+0);
+#X text -564 53 - level of reverbed signal \, between 0 and 1 (default:
+0.3);
+#X msg -666 52 Dry-Wet-Mix 0.2;
+#X msg -665 7 Mid-RT60 1;
+#X text -551 31 - high-frequency damping corner frequency;
+#X text -579 7 - time to decay by 60 dB at middle frequencies;
+#X msg -665 -42 Low-RT60 2;
+#X text -575 -42 - time to decay 60 dB at low frequencies;
+#X text -575 -15 - cross-over frequency between low and middle frequencies
+;
+#X msg -665 -17 LF-X 1000;
+#X msg -666 30 HF-Damping 4000;
+#X msg -663 74 Level -10;
+#X obj -380 357 outlet~;
+#X obj 18 348 outlet~;
+#X obj -388 87 inlet~;
+#X obj 24 85 inlet~;
+#X obj 267 52 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 277 62 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj -715 -49 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X text -735 -69 set defaults;
+#X connect 0 1 14 0;
+#X connect 0 2 15 0;
+#X connect 1 0 0 0;
+#X connect 4 0 13 0;
+#X connect 4 0 0 0;
+#X connect 5 0 12 0;
+#X connect 5 0 0 0;
+#X connect 8 0 11 0;
+#X connect 11 0 5 0;
+#X connect 11 0 0 0;
+#X connect 12 0 4 0;
+#X connect 12 0 0 0;
+#X connect 13 0 0 0;
+#X connect 16 0 0 1;
+#X connect 17 0 0 2;
+#X connect 20 0 8 0;
+#X restore 155 330 pd reverb;
 #X connect 0 0 12 0;
 #X connect 0 1 2 0;
-#X connect 0 1 30 1;
-#X connect 0 2 30 2;
+#X connect 0 1 43 1;
+#X connect 0 2 43 2;
 #X connect 1 0 2 0;
 #X connect 2 0 3 0;
 #X connect 4 0 0 0;
@@ -160,26 +207,29 @@
 #X connect 15 0 13 1;
 #X connect 15 0 16 1;
 #X connect 16 0 12 2;
-#X connect 20 0 38 0;
-#X connect 20 0 35 0;
+#X connect 20 0 34 0;
 #X connect 21 0 22 0;
 #X connect 23 0 4 0;
 #X connect 29 0 4 2;
 #X connect 29 0 4 1;
-#X connect 30 1 13 0;
-#X connect 30 1 22 0;
-#X connect 30 2 22 1;
-#X connect 30 2 16 0;
-#X connect 31 0 40 0;
-#X connect 31 0 30 0;
-#X connect 32 0 39 0;
-#X connect 32 0 30 0;
-#X connect 35 0 30 0;
-#X connect 35 0 38 0;
-#X connect 38 0 32 0;
+#X connect 30 0 39 0;
+#X connect 30 0 43 0;
+#X connect 31 0 38 0;
+#X connect 31 0 43 0;
+#X connect 34 0 37 0;
+#X connect 34 0 43 0;
+#X connect 37 0 31 0;
+#X connect 37 0 43 0;
 #X connect 38 0 30 0;
-#X connect 39 0 31 0;
-#X connect 39 0 30 0;
-#X connect 40 0 30 0;
+#X connect 38 0 43 0;
+#X connect 39 0 43 0;
+#X connect 40 0 4 1;
+#X connect 40 0 4 2;
 #X connect 41 0 4 1;
 #X connect 41 0 4 2;
+#X connect 42 0 4 1;
+#X connect 42 0 4 2;
+#X connect 43 0 13 0;
+#X connect 43 0 22 0;
+#X connect 43 1 16 0;
+#X connect 43 1 22 1;
