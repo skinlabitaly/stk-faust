@@ -61,10 +61,9 @@ stringFilter(0) = stringFilterOP : seq(i,5,tf2(fCString(i,0),fCString(i,1),fCStr
 		};
 
 instrumentBody(force,bowVel,bowPosition,freq,trig,feedBckBridge) = (_*-1 <: _ + feedBckBridge,_ : 
-		(bowVelocity-_ <: bowTable*_ : _*(forceCondition*trig : smooth(0.993)) <: _,_),_ : _,_+_ : _ + feedBckBridge,_) ~ 
+		(bowVelocity-_ <: bowTable*_ : _*(trig : smooth(0.993)) <: _,_),_ : _,_+_ : _ + feedBckBridge,_) ~ 
 		neckDelay : !,fdelbridge,_
 	with{
-		forceCondition = force > 0;
 		tableOffset =  0;
 		tableSlope = 5 - (4.0*force);
 		bowTable = bow_new(tableOffset,tableSlope,force);
