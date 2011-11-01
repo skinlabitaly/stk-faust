@@ -1,4 +1,4 @@
-#N canvas 126 75 945 666 10;
+#N canvas 377 43 945 666 10;
 #X obj 89 180 violin~;
 #X obj -30 214 metro 100;
 #X obj 3 255 env~;
@@ -122,11 +122,11 @@
 #X obj 302 499 writesf~ 2;
 #X msg -174 113 bang;
 #X text -178 82 read gestures;
-#X text -74 108 directory;
-#X text -7 109 basefilename;
+#X text -18 127 directory;
+#X text 20 138 basefilename;
 #X text -72 315 level in dB;
 #X obj -156 228 print message;
-#X msg -11 86 muneira;
+#X msg 9 -22 muneira;
 #X msg 265 264 Dry-Wet-Mix 0.2;
 #X msg 266 219 Mid-RT60 1;
 #X text 376 242 - high-frequency damping corner frequency;
@@ -138,10 +138,10 @@
 #X msg 266 195 LF-X 1000;
 #X msg 265 242 HF-Damping 4000;
 #X msg 265 289 Level -10;
-#X msg 76 71 kreutzer2_saltato;
-#X msg 73 93 kreutzer2_saltato_pp;
-#X msg 76 119 kreutzer2_saltato_ff;
-#N canvas 618 22 951 504 reverb 0;
+#X msg 56 52 kreutzer2_saltato;
+#X msg 64 77 kreutzer2_saltato_pp;
+#X msg 76 99 kreutzer2_saltato_ff;
+#N canvas 489 22 951 504 reverb 0;
 #X obj -769 161 zita_rev1;
 #X obj -766 26 inlet;
 #X text -577 113 - level of unprocessed signal \, between 0 and 1 (default:
@@ -214,6 +214,8 @@
 #X connect 12 0 11 0;
 #X coords 0 -1 1 1 85 60 1 0 0;
 #X restore 103 218 pd switch;
+#X msg 44 27 zapateado2_v2;
+#X msg 29 2 partita3;
 #X connect 0 1 2 0;
 #X connect 0 1 45 0;
 #X connect 0 2 45 1;
@@ -264,3 +266,7 @@
 #X connect 44 2 45 3;
 #X connect 45 0 43 1;
 #X connect 45 1 43 2;
+#X connect 46 0 4 1;
+#X connect 46 0 4 2;
+#X connect 47 0 4 1;
+#X connect 47 0 4 2;
