@@ -1,4 +1,4 @@
-#N canvas 377 43 945 666 10;
+#N canvas 83 76 945 666 10;
 #X obj 89 180 violin~;
 #X obj -30 214 metro 100;
 #X obj 3 255 env~;
@@ -120,13 +120,13 @@
 #X msg 302 394 open -wave /media/sf_W7_C_DRIVE/Users/estefield/Documents/PROJECTS/VIOLIN_PM/soundTests/test.wav
 ;
 #X obj 302 499 writesf~ 2;
-#X msg -174 113 bang;
-#X text -178 82 read gestures;
+#X msg -182 123 bang;
+#X text -200 149 read gestures;
 #X text -18 127 directory;
 #X text 20 138 basefilename;
 #X text -72 315 level in dB;
 #X obj -156 228 print message;
-#X msg 9 -22 muneira;
+#X msg 175 66 muneira;
 #X msg 265 264 Dry-Wet-Mix 0.2;
 #X msg 266 219 Mid-RT60 1;
 #X text 376 242 - high-frequency damping corner frequency;
@@ -138,9 +138,9 @@
 #X msg 266 195 LF-X 1000;
 #X msg 265 242 HF-Damping 4000;
 #X msg 265 289 Level -10;
-#X msg 56 52 kreutzer2_saltato;
-#X msg 64 77 kreutzer2_saltato_pp;
-#X msg 76 99 kreutzer2_saltato_ff;
+#X msg -160 -12 kreutzer2_saltato;
+#X msg -160 10 kreutzer2_saltato_pp;
+#X msg -160 31 kreutzer2_saltato_ff;
 #N canvas 489 22 951 504 reverb 0;
 #X obj -769 161 zita_rev1;
 #X obj -766 26 inlet;
@@ -191,7 +191,7 @@
 #X obj 253 211 outlet~;
 #X obj 277 133 *~;
 #X obj 351 138 *~;
-#X obj 36 21 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1 1
+#X obj 36 21 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
 ;
 #X text 27 41 right;
 #X obj 129 48 inlet~;
@@ -214,8 +214,14 @@
 #X connect 12 0 11 0;
 #X coords 0 -1 1 1 85 60 1 0 0;
 #X restore 103 218 pd switch;
-#X msg 44 27 zapateado2_v2;
-#X msg 29 2 partita3;
+#X msg 124 -22 partita3;
+#X msg 125 -1 partita2bach;
+#X msg -160 69 kreutzer2_detache;
+#X msg -160 53 kreutzer2_legato_detache5;
+#X msg 16 25 zapateado2_v2;
+#X msg -13 -19 zapateado1;
+#X msg 2 3 zapateado2;
+#X msg 139 31 paganinni_ok;
 #X connect 0 1 2 0;
 #X connect 0 1 45 0;
 #X connect 0 2 45 1;
@@ -270,3 +276,14 @@
 #X connect 46 0 4 2;
 #X connect 47 0 4 1;
 #X connect 47 0 4 2;
+#X connect 48 0 4 1;
+#X connect 48 0 4 2;
+#X connect 49 0 4 1;
+#X connect 49 0 4 2;
+#X connect 50 0 4 1;
+#X connect 51 0 4 1;
+#X connect 51 0 4 2;
+#X connect 52 0 4 1;
+#X connect 52 0 4 2;
+#X connect 53 0 4 1;
+#X connect 53 0 4 2;

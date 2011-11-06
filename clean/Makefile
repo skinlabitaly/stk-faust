@@ -313,6 +313,5 @@ help:
 	@echo "make clean         : remove all object files"
 
 clean :
-	rm -rf *dir
 	rm -rf *-svg
 	$(MAKE) -f Makefile.mathdoc clean
